@@ -132,10 +132,6 @@ public class PullRequestActivityListener {
             attachment.setAuthorName(userName);
             attachment.setAuthorIcon(avatar);
 
-            String color = "";
-            String fallback = "";
-            String text = "";
-
             switch (event.getActivity().getAction()) {
                 case OPENED:
                     attachment.setColor(ColorCode.BLUE.getCode());
