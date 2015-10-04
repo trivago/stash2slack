@@ -1,10 +1,10 @@
-package com.pragbits.stash.tools;
+package com.pragbits.bitbucketserver.tools;
 
-import com.atlassian.stash.repository.Repository;
-import com.pragbits.stash.ImmutableSlackSettings;
-import com.pragbits.stash.SlackGlobalSettingsService;
-import com.pragbits.stash.SlackSettings;
-import com.pragbits.stash.SlackSettingsService;
+import com.atlassian.bitbucket.repository.Repository;
+import com.pragbits.bitbucketserver.ImmutableSlackSettings;
+import com.pragbits.bitbucketserver.SlackGlobalSettingsService;
+import com.pragbits.bitbucketserver.SlackSettings;
+import com.pragbits.bitbucketserver.SlackSettingsService;
 
 public class SettingsSelector {
 

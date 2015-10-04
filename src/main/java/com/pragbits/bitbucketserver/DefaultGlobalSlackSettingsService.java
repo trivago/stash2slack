@@ -1,9 +1,8 @@
-package com.pragbits.stash;
+package com.pragbits.bitbucketserver;
 
 
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
-import org.apache.xpath.operations.Bool;
 
 public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsService {
 

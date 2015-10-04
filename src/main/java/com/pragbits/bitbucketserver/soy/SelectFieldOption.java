@@ -1,4 +1,4 @@
-package com.pragbits.stash.soy;
+package com.pragbits.bitbucketserver.soy;
 
 public interface SelectFieldOption {
 

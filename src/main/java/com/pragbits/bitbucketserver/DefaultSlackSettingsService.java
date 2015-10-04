@@ -1,14 +1,14 @@
-package com.pragbits.stash;
+package com.pragbits.bitbucketserver;
 
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
-import com.atlassian.stash.repository.Repository;
-import com.atlassian.stash.user.Permission;
-import com.atlassian.stash.user.PermissionValidationService;
+import com.atlassian.bitbucket.repository.Repository;
+import com.atlassian.bitbucket.permission.Permission;
+import com.atlassian.bitbucket.permission.PermissionValidationService;
 import com.google.common.base.Throwables;
-import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
@@ -57,7 +57,7 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
     private final PluginSettings pluginSettings;
     private final PermissionValidationService validationService;
 
-    private final Cache<Integer, SlackSettings> cache = CacheBuilder.newBuilder().build(
+    private final LoadingCache<Integer, SlackSettings> cache = CacheBuilder.newBuilder().build(
             new CacheLoader<Integer, SlackSettings>() {
                 @Override
                 public SlackSettings load(@Nonnull Integer repositoryId) {

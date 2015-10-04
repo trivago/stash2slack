@@ -5,21 +5,21 @@
                            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
     <bean id="slackSettingsService"
-          class="com.pragbits.stash.DefaultSlackSettingsService">
+          class="com.pragbits.bitbucketserver.DefaultSlackSettingsService">
         <constructor-arg index="0" ref="pluginSettingsFactory"/>
         <constructor-arg index="1" ref="permissionValidationService"/>
     </bean>
 
     <bean id="slackGlobalSettingsService"
-          class="com.pragbits.stash.DefaultGlobalSlackSettingsService">
+          class="com.pragbits.bitbucketserver.DefaultGlobalSlackSettingsService">
         <constructor-arg index="0" ref="pluginSettingsFactory"/>
     </bean>
 
-    <bean id="slackNotifier" class="com.pragbits.stash.tools.SlackNotifier">
+    <bean id="slackNotifier" class="com.pragbits.bitbucketserver.tools.SlackNotifier">
     </bean>
 
     <bean id="pullRequestActivityListener"
-          class="com.pragbits.stash.components.PullRequestActivityListener">
+          class="com.pragbits.bitbucketserver.components.PullRequestActivityListener">
         <constructor-arg index="0" ref="slackGlobalSettingsService" />
         <constructor-arg index="1" ref="slackSettingsService" />
         <constructor-arg index="2" ref="navBuilder" />
@@ -28,7 +28,7 @@
     </bean>
 
     <bean id="repositoryPushActivityListener"
-          class="com.pragbits.stash.components.RepositoryPushActivityListener">
+          class="com.pragbits.bitbucketserver.components.RepositoryPushActivityListener">
         <constructor-arg index="0" ref="slackGlobalSettingsService" />
         <constructor-arg index="1" ref="slackSettingsService" />
         <constructor-arg index="2" ref="commitService" />

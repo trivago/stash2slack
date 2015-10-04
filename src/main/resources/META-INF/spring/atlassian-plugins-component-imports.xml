@@ -7,14 +7,14 @@
                            http://www.springframework.org/schema/osgi
                            http://www.springframework.org/schema/osgi/spring-osgi.xsd">
 
-    <osgi:reference id="i18nService" interface="com.atlassian.stash.i18n.I18nService"/>
+    <osgi:reference id="i18nService" interface="com.atlassian.bitbucket.i18n.I18nService"/>
     <osgi:reference id="pageBuilderService" interface="com.atlassian.webresource.api.assembler.PageBuilderService"/>
-    <osgi:reference id="permissionValidationService" interface="com.atlassian.stash.user.PermissionValidationService"/>
+    <osgi:reference id="permissionValidationService" interface="com.atlassian.bitbucket.permission.PermissionValidationService"/>
     <osgi:reference id="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory"/>
-    <osgi:reference id="repositoryService" interface="com.atlassian.stash.repository.RepositoryService"/>
-    <osgi:reference id="avatarService" interface="com.atlassian.stash.avatar.AvatarService"/>
+    <osgi:reference id="repositoryService" interface="com.atlassian.bitbucket.repository.RepositoryService"/>
+    <osgi:reference id="avatarService" interface="com.atlassian.bitbucket.avatar.AvatarService"/>
     <osgi:reference id="soyTemplateRenderer" interface="com.atlassian.soy.renderer.SoyTemplateRenderer"/>
-    <osgi:reference id="navBuilder" interface="com.atlassian.stash.nav.NavBuilder"/>
-    <osgi:reference id="commitService" interface="com.atlassian.stash.commit.CommitService"/>
+    <osgi:reference id="navBuilder" interface="com.atlassian.bitbucket.nav.NavBuilder"/>
+    <osgi:reference id="commitService" interface="com.atlassian.bitbucket.commit.CommitService"/>
 
 </beans>

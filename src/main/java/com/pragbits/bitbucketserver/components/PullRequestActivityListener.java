@@ -1,17 +1,17 @@
-package com.pragbits.stash.components;
+package com.pragbits.bitbucketserver.components;
 
 import com.atlassian.event.api.EventListener;
-import com.atlassian.stash.event.pull.PullRequestActivityEvent;
-import com.atlassian.stash.event.pull.PullRequestCommentActivityEvent;
-import com.atlassian.stash.event.pull.PullRequestRescopeActivityEvent;
-import com.atlassian.stash.nav.NavBuilder;
-import com.atlassian.stash.pull.PullRequestParticipant;
-import com.atlassian.stash.repository.Repository;
-import com.atlassian.stash.avatar.AvatarService;
-import com.atlassian.stash.avatar.AvatarRequest;
+import com.atlassian.bitbucket.event.pull.PullRequestActivityEvent;
+import com.atlassian.bitbucket.event.pull.PullRequestCommentActivityEvent;
+import com.atlassian.bitbucket.event.pull.PullRequestRescopeActivityEvent;
+import com.atlassian.bitbucket.nav.NavBuilder;
+import com.atlassian.bitbucket.pull.PullRequestParticipant;
+import com.atlassian.bitbucket.repository.Repository;
+import com.atlassian.bitbucket.avatar.AvatarService;
+import com.atlassian.bitbucket.avatar.AvatarRequest;
 import com.google.gson.Gson;
-import com.pragbits.stash.*;
-import com.pragbits.stash.tools.*;
+import com.pragbits.bitbucketserver.*;
+import com.pragbits.bitbucketserver.tools.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-{namespace stash.page.slack.settings}
+{namespace bitbucketserver.page.slack.settings}
 
 /**
  * @param repository
@@ -8,16 +8,16 @@
 {template .viewSlackSettings}
 <html>
     <head>
-        <meta name="decorator" content="stash.repository.settings">
+        <meta name="decorator" content="bitbucket.repository.settings">
         <meta name="projectKey" content="{$repository.project.key}">
         <meta name="repositorySlug" content="{$repository.slug}">
         <meta name="activeTab" content="repository-settings-slack-settings">
-        <title>{{stash_i18n('stash.web.slack.settings.title', 'Slack settings for {0} / {1}', $repository.project.name, $repository.name)}}</title>
+        <title>{{getText('stash2slack.local.settings.slack.title', $repository.project.name, $repository.name)}}</title>
     </head>
     <body>
         {call widget.aui.pageHeader}
             {param content}
-                <h2>{stash_i18n('stash.web.slack.settings.heading', 'Slack settings')}</h2>
+                <h2>{getText('stash2slack.local.settings.heading')}</h2>
             {/param}
         {/call}
         {call widget.aui.form.form}
@@ -26,23 +26,23 @@
 
                 {call widget.aui.form.checkbox}
                     {param id: 'slackNotificationsOverrideEnabled' /}
-                    {param labelContent: stash_i18n('stash.web.slack.settings.slack.enabled.label', 'Override settings for global slack notification options') /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.override.label') /}
                     {param checked: $slackSettings.slackNotificationsOverrideEnabled /}
-                    {param description: stash_i18n('stash.web.slack.settings.slack.override.description', 'If enabled, slack notifications will use the settings defined here instead of global settings. NOTE: You do not need to enable this checkbox if you want to change only the channel name or the hook (old behavior). This flag is overriding pr filters and/or push notification options. Note however, if you enable the flag, you HAVE to set a channel name as well (only the hook is not required).') /}
+                    {param description: getText('stash2slack.local.settings.slack.override.description') /}
                 {/call}
 
                 <h4>Pull request notifications</h4>
 
                 {call widget.aui.form.checkbox}
                     {param id: 'slackNotificationsEnabled' /}
-                    {param labelContent: stash_i18n('stash.web.slack.settings.slack.enabled.label', 'Enable slack notifications for pull requests') /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.enabled.label') /}
                     {param checked: $slackSettings.slackNotificationsEnabled /}
-                    {param description: stash_i18n('stash.web.slack.settings.slack.enabled.description', 'If enabled, users will receive slack notifications about pull request activities') /}
+                    {param description: getText('stash2slack.local.settings.slack.enabled.description') /}
                 {/call}
 
                 {call aui.form.selectField}
                     {param id: 'slackNotificationPrLevel' /}
-                    {param labelContent: stash_i18n('stash.web.slack.settings.notification.pr.level.label', 'Pull request notification level') /}
+                    {param labelContent: getText('stash2slack.local.settings.notification.pr.level.label') /}
                     {param value: $slackSettings.notificationPrLevel /}
                     {param options: $notificationLevels /}
                 {/call}
@@ -52,51 +52,51 @@
                     <p>Filter pull request events based on activity types</p>
                     {call widget.aui.form.checkbox}
                         {param id: 'slackNotificationsOpenedEnabled' /}
-                        {param labelContent: stash_i18n('stash.web.slack.settings.slack.opened.enabled.label', 'Opened') /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.opened.enabled.label') /}
                         {param checked: $slackSettings.slackNotificationsOpenedEnabled /}
-                        {param description: stash_i18n('stash.web.slack.settings.slack.opened.enabled.description', 'Send notifications for Opened PR events') /}
+                        {param description: getText('stash2slack.local.settings.slack.opened.enabled.description') /}
                     {/call}
                     {call widget.aui.form.checkbox}
                         {param id: 'slackNotificationsReopenedEnabled' /}
-                        {param labelContent: stash_i18n('stash.web.slack.settings.slack.reopened.enabled.label', 'Reopened') /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.reopened.enabled.label') /}
                         {param checked: $slackSettings.slackNotificationsReopenedEnabled /}
-                        {param description: stash_i18n('stash.web.slack.settings.slack.reopened.enabled.description', 'Send notifications for Reopened PR events') /}
+                        {param description: getText('stash2slack.local.settings.settings.slack.reopened.enabled.description') /}
                     {/call}
                     {call widget.aui.form.checkbox}
                         {param id: 'slackNotificationsUpdatedEnabled' /}
-                        {param labelContent: stash_i18n('stash.web.slack.settings.slack.updated.enabled.label', 'Updated') /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.updated.enabled.label') /}
                         {param checked: $slackSettings.slackNotificationsUpdatedEnabled /}
-                        {param description: stash_i18n('stash.web.slack.settings.slack.updated.enabled.description', 'Send notifications for Updated PR events') /}
+                        {param description: getText('stash2slack.local.settings.slack.updated.enabled.description') /}
                     {/call}
                     {call widget.aui.form.checkbox}
                         {param id: 'slackNotificationsApprovedEnabled' /}
-                        {param labelContent: stash_i18n('stash.web.slack.settings.slack.approved.enabled.label', 'Approved') /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.approved.enabled.label') /}
                         {param checked: $slackSettings.slackNotificationsApprovedEnabled /}
-                        {param description: stash_i18n('stash.web.slack.settings.slack.approved.enabled.description', 'Send notifications for Approved PR events') /}
+                        {param description: getText('stash2slack.local.settings.slack.approved.enabled.description') /}
                     {/call}
                     {call widget.aui.form.checkbox}
                         {param id: 'slackNotificationsUnapprovedEnabled' /}
-                        {param labelContent: stash_i18n('stash.web.slack.settings.slack.unapproved.enabled.label', 'Unapproved') /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.unapproved.enabled.label') /}
                         {param checked: $slackSettings.slackNotificationsUnapprovedEnabled /}
-                        {param description: stash_i18n('stash.web.slack.settings.slack.unapproved.enabled.description', 'Send notifications for Unapproved PR events') /}
+                        {param description: getText('stash2slack.local.settings.slack.unapproved.enabled.description') /}
                     {/call}
                     {call widget.aui.form.checkbox}
                         {param id: 'slackNotificationsDeclinedEnabled' /}
-                        {param labelContent: stash_i18n('stash.web.slack.settings.slack.declined.enabled.label', 'Declined') /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.declined.enabled.label') /}
                         {param checked: $slackSettings.slackNotificationsDeclinedEnabled /}
-                        {param description: stash_i18n('stash.web.slack.settings.slack.declined.enabled.description', 'Send notifications for Declined PR events') /}
+                        {param description: getText('stash2slack.local.settings.slack.declined.enabled.description') /}
                     {/call}
                     {call widget.aui.form.checkbox}
                         {param id: 'slackNotificationsMergedEnabled' /}
-                        {param labelContent: stash_i18n('stash.web.slack.settings.slack.merged.enabled.label', 'Merged') /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.merged.enabled.label') /}
                         {param checked: $slackSettings.slackNotificationsMergedEnabled /}
-                        {param description: stash_i18n('stash.web.slack.settings.slack.merged.enabled.description', 'Send notifications for Merged PR events') /}
+                        {param description: getText('stash2slack.local.settings.slack.merged.enabled.description') /}
                     {/call}
                     {call widget.aui.form.checkbox}
                         {param id: 'slackNotificationsCommentedEnabled' /}
-                        {param labelContent: stash_i18n('stash.web.slack.settings.slack.commented.enabled.label', 'Commented') /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.commented.enabled.label') /}
                         {param checked: $slackSettings.slackNotificationsCommentedEnabled /}
-                        {param description: stash_i18n('stash.web.slack.settings.slack.commented.enabled.description', 'Send notifications for Commented PR events') /}
+                        {param description: getText('stash2slack.local.settings.slack.commented.enabled.description') /}
                     {/call}
                 </div>
 
@@ -104,13 +104,13 @@
 
                 {call widget.aui.form.checkbox}
                     {param id: 'slackNotificationsEnabledForPush' /}
-                    {param labelContent: stash_i18n('stash.web.slack.settings.slack.push.enabled.label', 'Enable slack notifications for push') /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.push.enabled.label') /}
                     {param checked: $slackSettings.slackNotificationsEnabledForPush /}
-                    {param description: stash_i18n('stash.web.slack.settings.slack.push.enabled.description', 'If enabled, users will receive slack notifications about push activities') /}
+                    {param description: getText('stash2slack.local.settings.slack.push.enabled.description') /}
                 {/call}
                 {call aui.form.selectField}
                     {param id: 'slackNotificationLevel' /}
-                    {param labelContent: stash_i18n('stash.web.slack.settings.notification.level.label', 'Push notification level') /}
+                    {param labelContent: getText('stash2slack.local.settings.notification.level.label') /}
                     {param value: $slackSettings.notificationLevel /}
                     {param options: $notificationLevels /}
                 {/call}
@@ -119,30 +119,30 @@
 
                 {call widget.aui.form.checkbox}
                     {param id: 'slackNotificationsEnabledForPersonal' /}
-                    {param labelContent: stash_i18n('stash.web.slack.settings.slack.personal.enabled.label', 'Enable slack notifications for personal') /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.personal.enabled.label') /}
                     {param checked: $slackSettings.slackNotificationsEnabledForPersonal /}
-                    {param description: stash_i18n('stash.web.slack.settings.slack.personal.enabled.description', 'If enabled, users will receive slack notifications for personal repos (forks) for both push and pullreqs') /}
+                    {param description: getText('stash2slack.local.settings.slack.personal.enabled.description') /}
                 {/call}
 
 
                 <h4>Channel and hook overrides</h4>
                 {call widget.aui.form.text}
                     {param id: 'slackChannelName' /}
-                    {param labelContent: stash_i18n('stash.web.slack.settings.slack.channel', 'Channel name') /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.channel') /}
                     {param initialValue: $slackSettings.slackChannelName /}
-                    {param description: stash_i18n('stash.web.slack.settings.slack.channel.description', 'Slack channel to use. Accepts a single channel name (example: #ch1), a comma separated list of channels (example: #ch1, #ch2, #ch3), or you can leave it empty. When empty, the default channel will be used within the webhook.') /}
+                    {param description: getText('stash2slack.local.settings.slack.channel.description') /}
                 {/call}
                 {call widget.aui.form.text}
                     {param id: 'slackWebHookUrl' /}
-                    {param labelContent: stash_i18n('stash.web.slack.settings.slack.webhookurl', 'Webhook Url') /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.webhookurl') /}
                     {param initialValue: $slackSettings.slackWebHookUrl /}
-                    {param description: stash_i18n('stash.web.slack.settings.slack.webhookurl.description', 'Slack webhook url. Overrides global setting, if nonempty. Useful when you want to post to a different team using a different hook') /}
+                    {param description: getText('stash2slack.local.settings.slack.webhookurl.description') /}
                 {/call}
                 {call aui.form.buttons}
                     {param content}
                         {call aui.form.submit}
-                            {param id: 'stash.web.slack.settings.submit' /}
-                            {param text: stash_i18n('stash.web.slack.settings.submit', 'Save') /}
+                            {param id: 'bitbucketserver.web.slack.settings.submit' /}
+                            {param text: getText('stash2slack.local.settings.submit') /}
                             {param type: 'submit' /}
                         {/call}
                     {/param}

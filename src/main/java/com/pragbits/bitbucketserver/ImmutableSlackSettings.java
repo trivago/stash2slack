@@ -1,4 +1,4 @@
-package com.pragbits.stash;
+package com.pragbits.bitbucketserver;
 
 public class ImmutableSlackSettings implements SlackSettings {
 

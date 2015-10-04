@@ -1,4 +1,4 @@
-package com.pragbits.stash.tools;
+package com.pragbits.bitbucketserver.tools;
 
 import java.util.LinkedList;
 import java.util.List;

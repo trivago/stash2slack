@@ -1,9 +1,9 @@
-package com.pragbits.stash;
+package com.pragbits.bitbucketserver;
 
 public class PluginMetadata {
 
     public static String getPluginKey() {
-        return "com.pragbits.stash.stash2slack";
+        return "com.pragbits.bitbucketserver.stash2slack";
     }
 
     public static String getCompleteModuleKey(String moduleKey) {

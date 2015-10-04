@@ -1,4 +1,4 @@
-package com.pragbits.stash.soy;
+package com.pragbits.bitbucketserver.soy;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;

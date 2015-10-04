@@ -1,4 +1,4 @@
-package com.pragbits.stash.tools;
+package com.pragbits.bitbucketserver.tools;
 import com.google.gson.annotations.*;
 
 public class SlackAttachmentField {

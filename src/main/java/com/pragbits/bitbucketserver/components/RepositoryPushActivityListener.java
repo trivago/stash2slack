@@ -1,24 +1,22 @@
-package com.pragbits.stash.components;
+package com.pragbits.bitbucketserver.components;
 
+import com.atlassian.bitbucket.commit.*;
+import com.atlassian.bitbucket.util.PageRequestImpl;
 import com.atlassian.event.api.EventListener;
-import com.atlassian.stash.commit.CommitService;
-import com.atlassian.stash.content.Changeset;
-import com.atlassian.stash.content.ChangesetsBetweenRequest;
-import com.atlassian.stash.event.RepositoryPushEvent;
-import com.atlassian.stash.nav.NavBuilder;
-import com.atlassian.stash.repository.RefChange;
-import com.atlassian.stash.repository.RefChangeType;
-import com.atlassian.stash.repository.Repository;
-import com.atlassian.stash.util.Page;
-import com.atlassian.stash.util.PageRequest;
-import com.atlassian.stash.util.PageUtils;
+import com.atlassian.bitbucket.event.repository.RepositoryPushEvent;
+import com.atlassian.bitbucket.nav.NavBuilder;
+import com.atlassian.bitbucket.repository.RefChange;
+import com.atlassian.bitbucket.repository.RefChangeType;
+import com.atlassian.bitbucket.repository.Repository;
+import com.atlassian.bitbucket.util.Page;
+import com.atlassian.bitbucket.util.PageRequest;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.pragbits.stash.ColorCode;
-import com.pragbits.stash.SlackGlobalSettingsService;
-import com.pragbits.stash.SlackSettings;
-import com.pragbits.stash.SlackSettingsService;
-import com.pragbits.stash.tools.*;
+import com.pragbits.bitbucketserver.ColorCode;
+import com.pragbits.bitbucketserver.SlackGlobalSettingsService;
+import com.pragbits.bitbucketserver.SlackSettings;
+import com.pragbits.bitbucketserver.SlackSettingsService;
+import com.pragbits.bitbucketserver.tools.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,16 +80,17 @@ public class RepositoryPushActivityListener {
 
             for (RefChange refChange : event.getRefChanges()) {
                 String text;
-                String ref = refChange.getRefId();
+                String ref = refChange.getRef().getId();
                 NavBuilder.Repo repoUrlBuilder = navBuilder
                         .project(projectName)
                         .repo(repoName);
                 String url = repoUrlBuilder
                         .commits()
-                        .until(refChange.getRefId())
+                        .until(refChange.getRef().getId())
                         .buildAbsolute();
 
-                List<Changeset> myChanges = new LinkedList<Changeset>();
+                List<Commit> myCommits = new LinkedList<Commit>();
+
                 boolean isNewRef = refChange.getFromHash().equalsIgnoreCase("0000000000000000000000000000000000000000");
                 boolean isDeleted = refChange.getToHash().equalsIgnoreCase("0000000000000000000000000000000000000000")
                     && refChange.getType() == RefChangeType.DELETE;
@@ -111,8 +110,7 @@ public class RepositoryPushActivityListener {
                 } else if (isNewRef) {
                     // issue#3 if fromHash is all zero (meaning the beginning of everything, probably), then this push is probably
                     // a new branch or tag, and we want only to display the latest commit, not the entire history
-                    Changeset latestChangeSet = commitService.getChangeset(repository, refChange.getToHash());
-                    myChanges.add(latestChangeSet);
+
                     if (ref.indexOf("refs/tags") >= 0) {
                         text = String.format("Tag <%s|`%s`> pushed on <%s|`%s`>. See <%s|commit list>.",
                                 url,
@@ -130,17 +128,12 @@ public class RepositoryPushActivityListener {
                                 url);
                     }
                 } else {
-                    ChangesetsBetweenRequest request = new ChangesetsBetweenRequest.Builder(repository)
-                            .exclude(refChange.getFromHash())
-                            .include(refChange.getToHash())
-                            .build();
+                    PageRequest pRequest = new PageRequestImpl(0, PageRequest.MAX_PAGE_LIMIT);
+                    CommitsBetweenRequest commitsBetween = new CommitsBetweenRequest.Builder(repository).exclude(refChange.getFromHash()).include(refChange.getToHash()).build();
+                    Page<Commit> commitList = commitService.getCommitsBetween(commitsBetween, pRequest);
+                    myCommits.addAll(Lists.newArrayList(commitList.getValues()));
 
-                    Page<Changeset> changeSets = commitService.getChangesetsBetween(
-                            request, PageUtils.newRequest(0, PageRequest.MAX_PAGE_LIMIT));
-
-                    myChanges.addAll(Lists.newArrayList(changeSets.getValues()));
-
-                    int commitCount = myChanges.size();
+                    int commitCount = myCommits.size();
                     String commitStr = commitCount == 1 ? "commit" : "commits";
 
                     String branch = ref.replace("refs/heads/", "");
@@ -157,7 +150,6 @@ public class RepositoryPushActivityListener {
 
                 // Figure out what type of change this is:
 
-
                 SlackPayload payload = new SlackPayload();
 
                 payload.setText(text);
@@ -165,10 +157,10 @@ public class RepositoryPushActivityListener {
 
                 switch (resolvedSlackSettings.getNotificationLevel()) {
                     case COMPACT:
-                        compactCommitLog(event, refChange, payload, repoUrlBuilder, myChanges);
+                        compactCommitLog(event, refChange, payload, repoUrlBuilder, myCommits);
                         break;
                     case VERBOSE:
-                        verboseCommitLog(event, refChange, payload, repoUrlBuilder, text, myChanges);
+                        verboseCommitLog(event, refChange, payload, repoUrlBuilder, text, myCommits);
                         break;
                     case MINIMAL:
                     default:
@@ -193,8 +185,8 @@ public class RepositoryPushActivityListener {
         }
     }
 
-    private void compactCommitLog(RepositoryPushEvent event, RefChange refChange, SlackPayload payload, NavBuilder.Repo urlBuilder, List<Changeset> myChanges) {
-        if (myChanges.size() == 0) {
+    private void compactCommitLog(RepositoryPushEvent event, RefChange refChange, SlackPayload payload, NavBuilder.Repo urlBuilder, List<Commit> myCommits) {
+        if (myCommits.size() == 0) {
             // If there are no commits, no reason to add anything
         }
         SlackAttachment commits = new SlackAttachment();
@@ -203,16 +195,16 @@ public class RepositoryPushActivityListener {
         //commits.setTitle(String.format("[%s:%s]", event.getRepository().getName(), refChange.getRefId().replace("refs/heads", "")));
         StringBuilder attachmentFallback = new StringBuilder();
         StringBuilder commitListBlock = new StringBuilder();
-        for (Changeset ch : myChanges) {
-            String commitUrl = urlBuilder.changeset(ch.getId()).buildAbsolute();
-            String firstCommitMessageLine = ch.getMessage().split("\n")[0];
+        for (Commit c : myCommits) {
+            String commitUrl = urlBuilder.commit(c.getId()).buildAbsolute();
+            String firstCommitMessageLine = c.getMessage().split("\n")[0];
 
             // Note that we changed this to put everything in one attachment because otherwise it
             // doesn't get collapsed in slack (the see more... doesn't appear)
             commitListBlock.append(String.format("<%s|`%s`>: %s - _%s_\n",
-                    commitUrl, ch.getDisplayId(), firstCommitMessageLine, ch.getAuthor().getName()));
+                    commitUrl, c.getDisplayId(), firstCommitMessageLine, c.getAuthor().getName()));
 
-            attachmentFallback.append(String.format("%s: %s\n", ch.getDisplayId(), firstCommitMessageLine));
+            attachmentFallback.append(String.format("%s: %s\n", c.getDisplayId(), firstCommitMessageLine));
         }
         commits.setText(commitListBlock.toString());
         commits.setFallback(attachmentFallback.toString());
@@ -220,22 +212,21 @@ public class RepositoryPushActivityListener {
         payload.addAttachment(commits);
     }
 
-    private void verboseCommitLog(RepositoryPushEvent event, RefChange refChange, SlackPayload payload, NavBuilder.Repo urlBuilder, String text, List<Changeset> myChanges) {
-        for (Changeset ch : myChanges) {
+    private void verboseCommitLog(RepositoryPushEvent event, RefChange refChange, SlackPayload payload, NavBuilder.Repo urlBuilder, String text, List<Commit> myCommits) {
+        for (Commit c : myCommits) {
             SlackAttachment attachment = new SlackAttachment();
             attachment.setFallback(text);
             attachment.setColor(ColorCode.GRAY.getCode());
             SlackAttachmentField field = new SlackAttachmentField();
 
-            attachment.setTitle(String.format("[%s:%s] - %s", event.getRepository().getName(), refChange.getRefId().replace("refs/heads", ""), ch.getId()));
-            attachment.setTitle_link(urlBuilder.changeset(ch.getId()).buildAbsolute());
+            attachment.setTitle(String.format("[%s:%s] - %s", event.getRepository().getName(), refChange.getRefId().replace("refs/heads", ""), c.getId()));
+            attachment.setTitle_link(urlBuilder.commit(c.getId()).buildAbsolute());
 
             field.setTitle("comment");
-            field.setValue(ch.getMessage());
+            field.setValue(c.getMessage());
             field.setShort(false);
             attachment.addField(field);
             payload.addAttachment(attachment);
         }
     }
-
 }

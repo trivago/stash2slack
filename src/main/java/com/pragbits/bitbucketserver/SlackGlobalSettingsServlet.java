@@ -1,22 +1,14 @@
-package com.pragbits.stash;
+package com.pragbits.bitbucketserver;
 
-import com.atlassian.sal.api.pluginsettings.PluginSettings;
-import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.soy.renderer.SoyException;
 import com.atlassian.soy.renderer.SoyTemplateRenderer;
-import com.atlassian.stash.exception.AuthorisationException;
-import com.atlassian.stash.nav.NavBuilder;
-import com.pragbits.stash.PluginMetadata;
-import com.atlassian.stash.repository.Repository;
-import com.atlassian.stash.repository.RepositoryService;
-import com.atlassian.stash.avatar.AvatarService;
-import com.atlassian.stash.user.Permission;
-import com.atlassian.stash.user.PermissionValidationService;
+import com.atlassian.bitbucket.AuthorisationException;
+import com.atlassian.bitbucket.permission.Permission;
+import com.atlassian.bitbucket.permission.PermissionValidationService;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
-import com.atlassian.stash.i18n.I18nService;
-import com.google.common.base.Strings;
+import com.atlassian.bitbucket.i18n.I18nService;
 import com.google.common.collect.ImmutableMap;
-import com.pragbits.stash.soy.SelectFieldOptions;
+import com.pragbits.bitbucketserver.soy.SelectFieldOptions;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -202,7 +194,7 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
         String notificationPrLevel = slackGlobalSettingsService.getNotificationPrLevel(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL).toString();
 
         render(response,
-                "stash.page.slack.global.settings.viewGlobalSlackSettings",
+                "bitbucketserver.page.slack.global.settings.viewGlobalSlackSettings",
                 ImmutableMap.<String, Object>builder()
                         .put("slackGlobalWebHookUrl", webHookUrl)
                         .put("slackChannelName", channelName)

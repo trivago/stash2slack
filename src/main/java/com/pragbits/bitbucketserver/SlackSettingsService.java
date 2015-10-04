@@ -1,6 +1,6 @@
-package com.pragbits.stash;
+package com.pragbits.bitbucketserver;
 
-import com.atlassian.stash.repository.Repository;
+import com.atlassian.bitbucket.repository.Repository;
 import javax.annotation.Nonnull;
 
 public interface SlackSettingsService {

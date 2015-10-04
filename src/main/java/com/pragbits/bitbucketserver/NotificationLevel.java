@@ -1,6 +1,6 @@
-package com.pragbits.stash;
+package com.pragbits.bitbucketserver;
 
-import com.pragbits.stash.soy.SelectFieldOption;
+import com.pragbits.bitbucketserver.soy.SelectFieldOption;
 
 public enum NotificationLevel implements SelectFieldOption {
     MINIMAL("Minimal"),

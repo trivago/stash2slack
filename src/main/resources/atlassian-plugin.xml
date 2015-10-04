@@ -9,6 +9,10 @@
     <param name="plugin-icon">images/pluginIcon.png</param>
     <param name="plugin-logo">images/pluginLogo.png</param>
 
+      <permissions>
+          <permission>execute_java</permission>
+      </permissions>
+
   </plugin-info>
   <!-- add our web resources -->
   <web-resource key="slash2stack-resources" name="slash2stack Web Resources">
@@ -17,36 +21,38 @@
     <context>slash2stack</context>
   </web-resource>
   
-  <component key="pull-request-activity-listener" class="com.pragbits.stash.components.PullRequestActivityListener">
+  <component key="pull-request-activity-listener" class="com.pragbits.bitbucketserver.components.PullRequestActivityListener">
   </component>
 
-  <component key="push-activity-listener" class="com.pragbits.stash.components.RepositoryPushActivityListener">
+  <component key="push-activity-listener" class="com.pragbits.bitbucketserver.components.RepositoryPushActivityListener">
   </component>
+
+  <resource type="i18n" name="i18n" location="i18n/stash2slack"/>
   
-  <stash-resource key="soy-templates">
+  <client-resource key="soy-templates">
    <directory location="/static/">
     <include>/**/*.soy</include>
    </directory>
-   <dependency>com.atlassian.stash.stash-web-plugin:server-soy-templates</dependency>
-  </stash-resource>
+   <dependency>com.atlassian.bitbucket.server.bitbucket-web:server-soy-templates</dependency>
+  </client-resource>
 
-  <web-item key="repository-settings-slack-settings" weight="30" section="stash.repository.settings.panel/repository-settings-addons-section">
-   <label key="stash.web.repository.settings.tab.slack.settings">Slack settings</label>
-   <tooltip key="stash.web.repository.settings.tab.slack.settings.tooltip">Configure whether you want slack notifications</tooltip>
-   <link>${navBuilder.pluginServlets().path('slack-settings', $project.key, $repository.slug).buildRelNoContext()}</link>
+  <web-item key="repository-settings-slack-settings" weight="30" section="bitbucket.repository.settings.panel/repository-settings-addons-section">
+   <label key="bitbucket.server.web.repository.settings.tab.slack.settings">Slack settings</label>
+   <tooltip key="bitbucket.web.repository.settings.tab.slack.settings.tooltip">Configure whether you want slack notifications</tooltip>
+   <link>${navBuilder.pluginServlets().path('slack-settings', 'projects', $project.key, 'repos', $repository.slug).buildRelNoContext()}</link>
   </web-item>
 
   <web-item key="global-settings-slack-settings" weight="30" section="atl.admin/admin-settings-section">
-   <label key="stash.web.admin.settings.tab.slack.admin.settings">Stash 2 Slack settings</label>
-   <tooltip key="stash.web.admin.settings.tab.slack.admin.settings.tooltip">Configure global settings for slack notifications</tooltip>
+   <label key="bitbucket.server.web.admin.settings.tab.slack.admin.settings">Bitbucket Server 2 Slack settings</label>
+   <tooltip key="bitbucket.web.admin.settings.tab.slack.admin.settings.tooltip">Configure global settings for slack notifications</tooltip>
    <link>/plugins/servlet/slack-global-settings/admin</link>
   </web-item>
 
-  <servlet key="slack-settings-servlet" class="com.pragbits.stash.SlackSettingsServlet">
+  <servlet key="slack-settings-servlet" class="com.pragbits.bitbucketserver.SlackSettingsServlet">
    <url-pattern>/slack-settings/*</url-pattern>
   </servlet>
 
-  <servlet key="slack-global-settings-servlet" class="com.pragbits.stash.SlackGlobalSettingsServlet">
+  <servlet key="slack-global-settings-servlet" class="com.pragbits.bitbucketserver.SlackGlobalSettingsServlet">
    <url-pattern>/slack-global-settings/admin</url-pattern>
   </servlet>
 

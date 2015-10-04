@@ -1,17 +1,17 @@
-package com.pragbits.stash;
+package com.pragbits.bitbucketserver;
 
 import com.atlassian.soy.renderer.SoyException;
 import com.atlassian.soy.renderer.SoyTemplateRenderer;
-import com.atlassian.stash.exception.AuthorisationException;
-import com.atlassian.stash.repository.Repository;
-import com.atlassian.stash.repository.RepositoryService;
-import com.atlassian.stash.user.Permission;
-import com.atlassian.stash.user.PermissionValidationService;
+import com.atlassian.bitbucket.AuthorisationException;
+import com.atlassian.bitbucket.repository.Repository;
+import com.atlassian.bitbucket.repository.RepositoryService;
+import com.atlassian.bitbucket.permission.Permission;
+import com.atlassian.bitbucket.permission.PermissionValidationService;
 import com.atlassian.webresource.api.assembler.PageBuilderService;
-import com.atlassian.stash.i18n.I18nService;
+import com.atlassian.bitbucket.i18n.I18nService;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
-import com.pragbits.stash.soy.SelectFieldOptions;
+import com.pragbits.bitbucketserver.soy.SelectFieldOptions;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -160,12 +160,12 @@ public class SlackSettingsServlet extends HttpServlet {
             return;
         }
         String[] pathParts = pathInfo.substring(1).split("/");
-        if (pathParts.length != 2) {
+        if (pathParts.length != 4) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        String projectKey = pathParts[0];
-        String repoSlug = pathParts[1];
+        String projectKey = pathParts[1];
+        String repoSlug = pathParts[3];
         
         this.repository = repositoryService.getBySlug(projectKey, repoSlug);
         if (repository == null) {
@@ -181,7 +181,7 @@ public class SlackSettingsServlet extends HttpServlet {
         validationService.validateForRepository(repository, Permission.REPO_ADMIN);
         SlackSettings slackSettings = slackSettingsService.getSlackSettings(repository);
         render(response,
-                "stash.page.slack.settings.viewSlackSettings",
+                "bitbucketserver.page.slack.settings.viewSlackSettings",
                 ImmutableMap.<String, Object>builder()
                         .put("repository", repository)
                         .put("slackSettings", slackSettings)
