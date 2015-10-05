@@ -1,7 +1,7 @@
-# Stash2Slack
+# Stash2Slack (for Bitbucket Server)
 
-Plugin subscribes to Stash server events and send notifications to 
-slack channels.
+Plugin subscribes to Bitbucket Server events and send notifications to
+Slack channels.
 
 Currently the following events are supported:
 
@@ -24,12 +24,9 @@ You can enter the webhook url in the global settings. Just go to
 http://your.stash.host/plugins/servlet/slack-global-settings/admin and
 edit the hook url.
 
-Then for each repository, you can enable the notifications. Go to your
-repository page, select Settings, Slack settings. There are two check boxes,
-one for enabling notifications for pull requests, and one for push activities.
+The global settings can be set up for both push notifications and for pull requests.
+Then, for each repository those settings can be overriden if needed.
 
-You can also enter a custom channel name here, if you want your notifications
-to go to a different channel, and also a custom webhook url which overrides
-the default hook url, if it is set.
-
+Pull requests can be further filtered by events (opened, commented, etc). Also, notifications can be verbose,
+compact or minimal to slack.
 

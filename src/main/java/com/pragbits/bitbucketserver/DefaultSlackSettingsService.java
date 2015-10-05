@@ -70,7 +70,10 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
 
     public DefaultSlackSettingsService(PluginSettingsFactory pluginSettingsFactory, PermissionValidationService validationService) {
         this.validationService = validationService;
-        this.pluginSettings = pluginSettingsFactory.createSettingsForKey(PluginMetadata.getPluginKey());
+        // note we cannot use any more the PluginMetadata class here because that would reference a new name
+        // this would break existing slack settings for all old configuration, hardcoding the old key here to maintain compatibility
+        // after upgrading from slack to bitbucket server
+        this.pluginSettings = pluginSettingsFactory.createSettingsForKey("com.pragbits.stash.stash2slack");
     }
 
     @Nonnull
