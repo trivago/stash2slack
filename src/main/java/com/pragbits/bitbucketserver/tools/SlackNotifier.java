@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class SlackNotifier {
 
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
+    private final CloseableHttpClient httpClient = HttpClients.createSystem();
     private static final Logger log = LoggerFactory.getLogger(SlackNotifier.class);
 
     public  SlackNotifier() {
