@@ -1,6 +1,7 @@
 package com.pragbits.bitbucketserver.components;
 
 import com.atlassian.event.api.EventListener;
+import com.atlassian.bitbucket.comment.Comment;
 import com.atlassian.bitbucket.event.pull.PullRequestActivityEvent;
 import com.atlassian.bitbucket.event.pull.PullRequestCommentActivityEvent;
 import com.atlassian.bitbucket.event.pull.PullRequestRescopeActivityEvent;
@@ -116,11 +117,13 @@ public class PullRequestActivityListener {
             if (activity.equalsIgnoreCase("COMMENTED") && !resolvedSlackSettings.isSlackNotificationsCommentedEnabled()) {
                 return;
             }
-            
-            String url = navBuilder
+
+            NavBuilder.PullRequest pullRequestUrlBuilder = navBuilder
                     .project(projectName)
                     .repo(repoName)
-                    .pullRequest(pullRequestId)
+                    .pullRequest(pullRequestId);
+
+            String url = pullRequestUrlBuilder
                     .overview()
                     .buildAbsolute();
 
@@ -131,10 +134,6 @@ public class PullRequestActivityListener {
             SlackAttachment attachment = new SlackAttachment();
             attachment.setAuthorName(userName);
             attachment.setAuthorIcon(avatar);
-
-            String color = "";
-            String fallback = "";
-            String text = "";
 
             switch (event.getActivity().getAction()) {
                 case OPENED:
@@ -257,20 +256,25 @@ public class PullRequestActivityListener {
                     break;
 
                 case COMMENTED:
+                    Comment comment = ((PullRequestCommentActivityEvent) event).getActivity().getComment();
+                    String commentUrl = pullRequestUrlBuilder
+                            .comment(comment.getId())
+                            .buildAbsolute();
+
                     attachment.setColor(ColorCode.PALE_BLUE.getCode());
                     attachment.setFallback(String.format("%s commented on pull request \"%s\". <%s|(open)>",
                                                             userName,
                                                             event.getPullRequest().getTitle(),
-                                                            url));
+                                                            commentUrl));
                     if (resolvedLevel == NotificationLevel.MINIMAL) {
                         attachment.setText(String.format("commented on pull request <%s|#%d: %s>",
-                                url,
+                                commentUrl,
                                 event.getPullRequest().getId(),
                                 event.getPullRequest().getTitle()));
                     }
                     if (resolvedLevel == NotificationLevel.COMPACT || resolvedLevel == NotificationLevel.VERBOSE) {
                         attachment.setText(String.format("commented on pull request <%s|#%d: %s>\n%s",
-                                url,
+                                commentUrl,
                                 event.getPullRequest().getId(),
                                 event.getPullRequest().getTitle(),
                                 ((PullRequestCommentActivityEvent) event).getActivity().getComment().getText()));
