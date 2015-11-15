@@ -39,6 +39,7 @@ public class SlackNotifier {
                     HttpEntity entity = response.getEntity();
                     String responseString = EntityUtils.toString(entity, "UTF-8");
                     log.error("#error during httpPost in SlackNotifier: " + responseString);
+                    log.error("\tpayload string: " + jsonString);
                 }
             } finally {
                 response.close();
