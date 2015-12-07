@@ -295,7 +295,7 @@ public class PullRequestActivityListener {
                 SlackAttachmentField repoField = new SlackAttachmentField();
                 repoField.setTitle("Destination");
                 repoField.setValue(String.format("_%s — %s_\n`%s`",
-                        event.getPullRequest().getFromRef().getRepository().getProject().getName(),
+                        event.getPullRequest().getToRef().getRepository().getProject().getName(),
                         event.getPullRequest().getToRef().getRepository().getName(),
                         event.getPullRequest().getToRef().getDisplayId()));
                 repoField.setShort(true);
