@@ -220,7 +220,7 @@ public class PullRequestActivityListener {
                     break;
 
                 case DECLINED:
-                    attachment.setColor(ColorCode.RED.getCode());
+                    attachment.setColor(ColorCode.DARK_RED.getCode());
                     attachment.setFallback(String.format("%s declined pull request \"%s\". <%s|(open)>",
                                                             userName,
                                                             event.getPullRequest().getTitle(),
@@ -232,7 +232,7 @@ public class PullRequestActivityListener {
                     break;
 
                 case MERGED:
-                    attachment.setColor(ColorCode.GREEN.getCode());
+                    attachment.setColor(ColorCode.DARK_GREEN.getCode());
                     attachment.setFallback(String.format("%s merged pull request \"%s\". <%s|(open)>",
                                                             userName,
                                                             event.getPullRequest().getTitle(),
