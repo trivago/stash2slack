@@ -18,22 +18,6 @@ import java.io.IOException;
 import java.util.Map;
 
 public class SlackGlobalSettingsServlet extends HttpServlet {
-    static final String KEY_GLOBAL_SETTING_HOOK_URL = "stash2slack.globalsettings.hookurl";
-    static final String KEY_GLOBAL_SETTING_CHANNEL_NAME = "stash2slack.globalsettings.channelname";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_ENABLED = "stash2slack.globalsettings.slacknotificationsenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_OPENED_ENABLED = "stash2slack.globalsettings.slacknotificationsopenedenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_REOPENED_ENABLED = "stash2slack.globalsettings.slacknotificationsreopenedenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_UPDATED_ENABLED = "stash2slack.globalsettings.slacknotificationsupdatedenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_APPROVED_ENABLED = "stash2slack.globalsettings.slacknotificationsapprovedenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_UNAPPROVED_ENABLED = "stash2slack.globalsettings.slacknotificationsunapprovedenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_DECLINED_ENABLED = "stash2slack.globalsettings.slacknotificationsdeclinedenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_MERGED_ENABLED = "stash2slack.globalsettings.slacknotificationsmergedenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_COMMENTED_ENABLED = "stash2slack.globalsettings.slacknotificationscommentedenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL = "stash2slack.globalsettings.slacknotificationslevel";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL = "stash2slack.globalsettings.slacknotificationsprlevel";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED = "stash2slack.globalsettings.slacknotificationspushenabled";
-    static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED = "stash2slack.globalsettings.slacknotificationspersonalenabled";
-
     private final PageBuilderService pageBuilderService;
     private final SlackGlobalSettingsService slackGlobalSettingsService;
     private final SoyTemplateRenderer soyTemplateRenderer;
@@ -65,56 +49,33 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
             return;
         }
 
-        final String globalWebHookUrl = req.getParameter("slackGlobalWebHookUrl").trim();
-        slackGlobalSettingsService.setWebHookUrl(KEY_GLOBAL_SETTING_HOOK_URL, globalWebHookUrl);
+        slackGlobalSettingsService.setWebHookUrl(req.getParameter("slackGlobalWebHookUrl").trim());
+        slackGlobalSettingsService.setChannelName(req.getParameter("slackChannelName"));
 
-        String slackChannelName = req.getParameter("slackChannelName");
-        slackGlobalSettingsService.setChannelName(KEY_GLOBAL_SETTING_CHANNEL_NAME, slackChannelName);
-
-        Boolean slackNotificationsEnabled = "on".equals(req.getParameter("slackNotificationsEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_ENABLED, slackNotificationsEnabled.toString());
-
-        Boolean slackNotificationsOpenedEnabled = "on".equals(req.getParameter("slackNotificationsOpenedEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsOpenedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_OPENED_ENABLED, slackNotificationsOpenedEnabled.toString());
-
-        Boolean slackNotificationsReopenedEnabled = "on".equals(req.getParameter("slackNotificationsReopenedEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsReopenedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_REOPENED_ENABLED, slackNotificationsReopenedEnabled.toString());
-
-        Boolean slackNotificationsUpdatedEnabled = "on".equals(req.getParameter("slackNotificationsUpdatedEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsUpdatedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_UPDATED_ENABLED, slackNotificationsUpdatedEnabled.toString());
-
-        Boolean slackNotificationsApprovedEnabled = "on".equals(req.getParameter("slackNotificationsApprovedEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsApprovedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_APPROVED_ENABLED, slackNotificationsApprovedEnabled.toString());
-
-        Boolean slackNotificationsUnapprovedEnabled = "on".equals(req.getParameter("slackNotificationsUnapprovedEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsUnapprovedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_UNAPPROVED_ENABLED, slackNotificationsUnapprovedEnabled.toString());
-
-        Boolean slackNotificationsDeclinedEnabled = "on".equals(req.getParameter("slackNotificationsDeclinedEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsDeclinedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_DECLINED_ENABLED, slackNotificationsDeclinedEnabled.toString());
-
-        Boolean slackNotificationsMergedEnabled = "on".equals(req.getParameter("slackNotificationsMergedEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsMergedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_MERGED_ENABLED, slackNotificationsMergedEnabled.toString());
-
-        Boolean slackNotificationsCommentedEnabled = "on".equals(req.getParameter("slackNotificationsCommentedEnabled"));
-        slackGlobalSettingsService.setSlackNotificationsCommentedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_COMMENTED_ENABLED, slackNotificationsCommentedEnabled.toString());
+        slackGlobalSettingsService.setSlackNotificationsEnabled(bool(req, "slackNotificationsEnabled"));
+        slackGlobalSettingsService.setSlackNotificationsOpenedEnabled(bool(req, "slackNotificationsOpenedEnabled"));
+        slackGlobalSettingsService.setSlackNotificationsReopenedEnabled(bool(req, "slackNotificationsReopenedEnabled"));
+        slackGlobalSettingsService.setSlackNotificationsUpdatedEnabled(bool(req, "slackNotificationsUpdatedEnabled"));
+        slackGlobalSettingsService.setSlackNotificationsApprovedEnabled(bool(req, "slackNotificationsApprovedEnabled"));
+        slackGlobalSettingsService.setSlackNotificationsUnapprovedEnabled(bool(req, "slackNotificationsUnapprovedEnabled"));
+        slackGlobalSettingsService.setSlackNotificationsDeclinedEnabled(bool(req, "slackNotificationsDeclinedEnabled"));
+        slackGlobalSettingsService.setSlackNotificationsMergedEnabled(bool(req, "slackNotificationsMergedEnabled"));
+        slackGlobalSettingsService.setSlackNotificationsCommentedEnabled(bool(req, "slackNotificationsCommentedEnabled"));
 
         NotificationLevel notificationLevel = NotificationLevel.VERBOSE;
         if (null != req.getParameter("slackNotificationLevel")) {
             notificationLevel = NotificationLevel.valueOf(req.getParameter("slackNotificationLevel"));
         }
-        slackGlobalSettingsService.setNotificationLevel(KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL, notificationLevel.toString());
+        slackGlobalSettingsService.setNotificationLevel(notificationLevel.toString());
 
         NotificationLevel notificationPrLevel = NotificationLevel.VERBOSE;
         if (null != req.getParameter("slackNotificationPrLevel")) {
             notificationPrLevel = NotificationLevel.valueOf(req.getParameter("slackNotificationPrLevel"));
         }
-        slackGlobalSettingsService.setNotificationPrLevel(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL, notificationPrLevel.toString());
+        slackGlobalSettingsService.setNotificationPrLevel(notificationPrLevel.toString());
 
-        Boolean slackNotificationsEnabledForPush = "on".equals(req.getParameter("slackNotificationsEnabledForPush"));
-        slackGlobalSettingsService.setSlackNotificationsEnabledForPush(KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED, slackNotificationsEnabledForPush.toString());
-
-        Boolean slackNotificationsEnabledForPersonal = "on".equals(req.getParameter("slackNotificationsEnabledForPersonal"));
-        slackGlobalSettingsService.setSlackNotificationsEnabledForPersonal(KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED, slackNotificationsEnabledForPersonal.toString());
+        slackGlobalSettingsService.setSlackNotificationsEnabledForPush(bool(req, "slackNotificationsEnabledForPush"));
+        slackGlobalSettingsService.setSlackNotificationsEnabledForPersonal(bool(req, "slackNotificationsEnabledForPersonal"));
 
         doGet(req, res);
     }
@@ -131,21 +92,21 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
 
         validationService.validateForGlobal(Permission.ADMIN);
 
-        String webHookUrl = slackGlobalSettingsService.getWebHookUrl(KEY_GLOBAL_SETTING_HOOK_URL);
-        String channelName = slackGlobalSettingsService.getChannelName(KEY_GLOBAL_SETTING_CHANNEL_NAME);
-        Boolean slackNotificationsEnabled = slackGlobalSettingsService.getSlackNotificationsEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_ENABLED);
-        Boolean slackNotificationsOpenedEnabled = slackGlobalSettingsService.getSlackNotificationsOpenedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_OPENED_ENABLED);
-        Boolean slackNotificationsReopenedEnabled = slackGlobalSettingsService.getSlackNotificationsReopenedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_REOPENED_ENABLED);
-        Boolean slackNotificationsUpdatedEnabled = slackGlobalSettingsService.getSlackNotificationsUpdatedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_UPDATED_ENABLED);
-        Boolean slackNotificationsApprovedEnabled = slackGlobalSettingsService.getSlackNotificationsApprovedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_APPROVED_ENABLED);
-        Boolean slackNotificationsUnapprovedEnabled = slackGlobalSettingsService.getSlackNotificationsUnapprovedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_UNAPPROVED_ENABLED);
-        Boolean slackNotificationsDeclinedEnabled = slackGlobalSettingsService.getSlackNotificationsDeclinedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_DECLINED_ENABLED);
-        Boolean slackNotificationsMergedEnabled = slackGlobalSettingsService.getSlackNotificationsMergedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_MERGED_ENABLED);
-        Boolean slackNotificationsCommentedEnabled = slackGlobalSettingsService.getSlackNotificationsCommentedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_COMMENTED_ENABLED);
-        Boolean slackNotificationsEnabledForPush = slackGlobalSettingsService.getSlackNotificationsEnabledForPush(KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED);
-        Boolean slackNotificationsEnabledForPersonal = slackGlobalSettingsService.getSlackNotificationsEnabledForPersonal(KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED);
-        String notificationLevel = slackGlobalSettingsService.getNotificationLevel(KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL).toString();
-        String notificationPrLevel = slackGlobalSettingsService.getNotificationPrLevel(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL).toString();
+        String webHookUrl = slackGlobalSettingsService.getWebHookUrl();
+        String channelName = slackGlobalSettingsService.getChannelName();
+        Boolean slackNotificationsEnabled = slackGlobalSettingsService.getSlackNotificationsEnabled();
+        Boolean slackNotificationsOpenedEnabled = slackGlobalSettingsService.getSlackNotificationsOpenedEnabled();
+        Boolean slackNotificationsReopenedEnabled = slackGlobalSettingsService.getSlackNotificationsReopenedEnabled();
+        Boolean slackNotificationsUpdatedEnabled = slackGlobalSettingsService.getSlackNotificationsUpdatedEnabled();
+        Boolean slackNotificationsApprovedEnabled = slackGlobalSettingsService.getSlackNotificationsApprovedEnabled();
+        Boolean slackNotificationsUnapprovedEnabled = slackGlobalSettingsService.getSlackNotificationsUnapprovedEnabled();
+        Boolean slackNotificationsDeclinedEnabled = slackGlobalSettingsService.getSlackNotificationsDeclinedEnabled();
+        Boolean slackNotificationsMergedEnabled = slackGlobalSettingsService.getSlackNotificationsMergedEnabled();
+        Boolean slackNotificationsCommentedEnabled = slackGlobalSettingsService.getSlackNotificationsCommentedEnabled();
+        Boolean slackNotificationsEnabledForPush = slackGlobalSettingsService.getSlackNotificationsEnabledForPush();
+        Boolean slackNotificationsEnabledForPersonal = slackGlobalSettingsService.getSlackNotificationsEnabledForPersonal();
+        String notificationLevel = slackGlobalSettingsService.getNotificationLevel().toString();
+        String notificationPrLevel = slackGlobalSettingsService.getNotificationPrLevel().toString();
 
         render(response,
                 "bitbucketserver.page.slack.global.settings.viewGlobalSlackSettings",
@@ -185,4 +146,7 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
         }
     }
 
+    private boolean bool(HttpServletRequest req, String name) {
+        return "on".equals(req.getParameter(name));
+    }
 }
