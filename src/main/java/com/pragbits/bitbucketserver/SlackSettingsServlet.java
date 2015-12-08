@@ -127,7 +127,7 @@ public class SlackSettingsServlet extends HttpServlet {
         }
 
         String channel = req.getParameter("slackChannelName");
-        String webHookUrl = req.getParameter("slackWebHookUrl");
+        String webHookUrl = req.getParameter("slackWebHookUrl").trim();
         slackSettingsService.setSlackSettings(
                 repository,
                 new ImmutableSlackSettings(

@@ -65,10 +65,8 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
             return;
         }
 
-        String globalWebHookUrl = req.getParameter("slackGlobalWebHookUrl");
-        if (null != globalWebHookUrl) {
-            slackGlobalSettingsService.setWebHookUrl(KEY_GLOBAL_SETTING_HOOK_URL, globalWebHookUrl);
-        }
+        final String globalWebHookUrl = req.getParameter("slackGlobalWebHookUrl").trim();
+        slackGlobalSettingsService.setWebHookUrl(KEY_GLOBAL_SETTING_HOOK_URL, globalWebHookUrl);
 
         String slackChannelName = req.getParameter("slackChannelName");
         if (null != slackChannelName) {
