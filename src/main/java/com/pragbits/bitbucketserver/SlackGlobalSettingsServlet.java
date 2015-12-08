@@ -54,7 +54,7 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
     }
 
     @Override
-    protected  void doPost(HttpServletRequest req, HttpServletResponse res)
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
         try {
@@ -69,62 +69,33 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
         slackGlobalSettingsService.setWebHookUrl(KEY_GLOBAL_SETTING_HOOK_URL, globalWebHookUrl);
 
         String slackChannelName = req.getParameter("slackChannelName");
-        if (null != slackChannelName) {
-            slackGlobalSettingsService.setChannelName(KEY_GLOBAL_SETTING_CHANNEL_NAME, slackChannelName);
-        }
+        slackGlobalSettingsService.setChannelName(KEY_GLOBAL_SETTING_CHANNEL_NAME, slackChannelName);
 
-        Boolean slackNotificationsEnabled = false;
-        if (null != req.getParameter("slackNotificationsEnabled") && req.getParameter("slackNotificationsEnabled").equals("on")) {
-            slackNotificationsEnabled = true;
-        }
+        Boolean slackNotificationsEnabled = "on".equals(req.getParameter("slackNotificationsEnabled"));
         slackGlobalSettingsService.setSlackNotificationsEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_ENABLED, slackNotificationsEnabled.toString());
 
-        Boolean slackNotificationsOpenedEnabled = false;
-        if (null != req.getParameter("slackNotificationsOpenedEnabled") && req.getParameter("slackNotificationsOpenedEnabled").equals("on")) {
-            slackNotificationsOpenedEnabled = true;
-        }
+        Boolean slackNotificationsOpenedEnabled = "on".equals(req.getParameter("slackNotificationsOpenedEnabled"));
         slackGlobalSettingsService.setSlackNotificationsOpenedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_OPENED_ENABLED, slackNotificationsOpenedEnabled.toString());
 
-        Boolean slackNotificationsReopenedEnabled = false;
-        if (null != req.getParameter("slackNotificationsReopenedEnabled") && req.getParameter("slackNotificationsReopenedEnabled").equals("on")) {
-            slackNotificationsReopenedEnabled = true;
-        }
+        Boolean slackNotificationsReopenedEnabled = "on".equals(req.getParameter("slackNotificationsReopenedEnabled"));
         slackGlobalSettingsService.setSlackNotificationsReopenedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_REOPENED_ENABLED, slackNotificationsReopenedEnabled.toString());
 
-        Boolean slackNotificationsUpdatedEnabled = false;
-        if (null != req.getParameter("slackNotificationsUpdatedEnabled") && req.getParameter("slackNotificationsUpdatedEnabled").equals("on")) {
-            slackNotificationsUpdatedEnabled = true;
-        }
+        Boolean slackNotificationsUpdatedEnabled = "on".equals(req.getParameter("slackNotificationsUpdatedEnabled"));
         slackGlobalSettingsService.setSlackNotificationsUpdatedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_UPDATED_ENABLED, slackNotificationsUpdatedEnabled.toString());
 
-        Boolean slackNotificationsApprovedEnabled = false;
-        if (null != req.getParameter("slackNotificationsApprovedEnabled") && req.getParameter("slackNotificationsApprovedEnabled").equals("on")) {
-            slackNotificationsApprovedEnabled = true;
-        }
+        Boolean slackNotificationsApprovedEnabled = "on".equals(req.getParameter("slackNotificationsApprovedEnabled"));
         slackGlobalSettingsService.setSlackNotificationsApprovedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_APPROVED_ENABLED, slackNotificationsApprovedEnabled.toString());
 
-        Boolean slackNotificationsUnapprovedEnabled = false;
-        if (null != req.getParameter("slackNotificationsUnapprovedEnabled") && req.getParameter("slackNotificationsUnapprovedEnabled").equals("on")) {
-            slackNotificationsUnapprovedEnabled = true;
-        }
+        Boolean slackNotificationsUnapprovedEnabled = "on".equals(req.getParameter("slackNotificationsUnapprovedEnabled"));
         slackGlobalSettingsService.setSlackNotificationsUnapprovedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_UNAPPROVED_ENABLED, slackNotificationsUnapprovedEnabled.toString());
 
-        Boolean slackNotificationsDeclinedEnabled = false;
-        if (null != req.getParameter("slackNotificationsDeclinedEnabled") && req.getParameter("slackNotificationsDeclinedEnabled").equals("on")) {
-            slackNotificationsDeclinedEnabled = true;
-        }
+        Boolean slackNotificationsDeclinedEnabled = "on".equals(req.getParameter("slackNotificationsDeclinedEnabled"));
         slackGlobalSettingsService.setSlackNotificationsDeclinedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_DECLINED_ENABLED, slackNotificationsDeclinedEnabled.toString());
 
-        Boolean slackNotificationsMergedEnabled = false;
-        if (null != req.getParameter("slackNotificationsMergedEnabled") && req.getParameter("slackNotificationsMergedEnabled").equals("on")) {
-            slackNotificationsMergedEnabled = true;
-        }
+        Boolean slackNotificationsMergedEnabled = "on".equals(req.getParameter("slackNotificationsMergedEnabled"));
         slackGlobalSettingsService.setSlackNotificationsMergedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_MERGED_ENABLED, slackNotificationsMergedEnabled.toString());
 
-        Boolean slackNotificationsCommentedEnabled = false;
-        if (null != req.getParameter("slackNotificationsCommentedEnabled") && req.getParameter("slackNotificationsCommentedEnabled").equals("on")) {
-            slackNotificationsCommentedEnabled = true;
-        }
+        Boolean slackNotificationsCommentedEnabled = "on".equals(req.getParameter("slackNotificationsCommentedEnabled"));
         slackGlobalSettingsService.setSlackNotificationsCommentedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_COMMENTED_ENABLED, slackNotificationsCommentedEnabled.toString());
 
         NotificationLevel notificationLevel = NotificationLevel.VERBOSE;
@@ -139,18 +110,11 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
         }
         slackGlobalSettingsService.setNotificationPrLevel(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL, notificationPrLevel.toString());
 
-        Boolean slackNotificationsEnabledForPush = false;
-        if (null != req.getParameter("slackNotificationsEnabledForPush") && req.getParameter("slackNotificationsEnabledForPush").equals("on")) {
-            slackNotificationsEnabledForPush = true;
-        }
+        Boolean slackNotificationsEnabledForPush = "on".equals(req.getParameter("slackNotificationsEnabledForPush"));
         slackGlobalSettingsService.setSlackNotificationsEnabledForPush(KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED, slackNotificationsEnabledForPush.toString());
 
-        Boolean slackNotificationsEnabledForPersonal = false;
-        if (null != req.getParameter("slackNotificationsEnabledForPersonal") && req.getParameter("slackNotificationsEnabledForPersonal").equals("on")) {
-            slackNotificationsEnabledForPersonal = true;
-        }
+        Boolean slackNotificationsEnabledForPersonal = "on".equals(req.getParameter("slackNotificationsEnabledForPersonal"));
         slackGlobalSettingsService.setSlackNotificationsEnabledForPersonal(KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED, slackNotificationsEnabledForPersonal.toString());
-
 
         doGet(req, res);
     }
@@ -168,15 +132,7 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
         validationService.validateForGlobal(Permission.ADMIN);
 
         String webHookUrl = slackGlobalSettingsService.getWebHookUrl(KEY_GLOBAL_SETTING_HOOK_URL);
-        if (null == webHookUrl || webHookUrl.equals("")) {
-            webHookUrl = "";
-        }
-
         String channelName = slackGlobalSettingsService.getChannelName(KEY_GLOBAL_SETTING_CHANNEL_NAME);
-        if (null == channelName || channelName.equals("")) {
-            channelName = "";
-        }
-
         Boolean slackNotificationsEnabled = slackGlobalSettingsService.getSlackNotificationsEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_ENABLED);
         Boolean slackNotificationsOpenedEnabled = slackGlobalSettingsService.getSlackNotificationsOpenedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_OPENED_ENABLED);
         Boolean slackNotificationsReopenedEnabled = slackGlobalSettingsService.getSlackNotificationsReopenedEnabled(KEY_GLOBAL_SETTING_NOTIFICATIONS_REOPENED_ENABLED);
