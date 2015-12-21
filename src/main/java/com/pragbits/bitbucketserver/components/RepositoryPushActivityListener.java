@@ -25,8 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class RepositoryPushActivityListener {
-    static final String KEY_GLOBAL_SETTING_HOOK_URL = "stash2slack.globalsettings.hookurl";
-    static final String KEY_GLOBAL_SLACK_CHANNEL_NAME = "stash2slack.globalsettings.channelname";
     private static final Logger log = LoggerFactory.getLogger(RepositoryPushActivityListener.class);
 
     private final SlackGlobalSettingsService slackGlobalSettingsService;
@@ -53,7 +51,7 @@ public class RepositoryPushActivityListener {
         // find out if notification is enabled for this repo
         Repository repository = event.getRepository();
         SlackSettings slackSettings = slackSettingsService.getSlackSettings(repository);
-        String globalHookUrl = slackGlobalSettingsService.getWebHookUrl(KEY_GLOBAL_SETTING_HOOK_URL);
+        String globalHookUrl = slackGlobalSettingsService.getWebHookUrl();
 
         SettingsSelector settingsSelector = new SettingsSelector(slackSettingsService,  slackGlobalSettingsService, repository);
         SlackSettings resolvedSlackSettings = settingsSelector.getResolvedSlackSettings();
@@ -61,7 +59,7 @@ public class RepositoryPushActivityListener {
         if (resolvedSlackSettings.isSlackNotificationsEnabledForPush()) {
             String localHookUrl = slackSettings.getSlackWebHookUrl();
             WebHookSelector hookSelector = new WebHookSelector(globalHookUrl, localHookUrl);
-            ChannelSelector channelSelector = new ChannelSelector(slackGlobalSettingsService.getChannelName(KEY_GLOBAL_SLACK_CHANNEL_NAME), slackSettings.getSlackChannelName());
+            ChannelSelector channelSelector = new ChannelSelector(slackGlobalSettingsService.getChannelName(), slackSettings.getSlackChannelName());
 
             if (!hookSelector.isHookValid()) {
                 log.error("There is no valid configured Web hook url! Reason: " + hookSelector.getProblem());
