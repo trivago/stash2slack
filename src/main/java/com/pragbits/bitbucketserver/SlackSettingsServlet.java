@@ -45,7 +45,7 @@ public class SlackSettingsServlet extends HttpServlet {
     }
 
     @Override
-    protected  void doPost(HttpServletRequest req, HttpServletResponse res)
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
         throws ServletException, IOException {
 
         try {
@@ -54,66 +54,6 @@ public class SlackSettingsServlet extends HttpServlet {
             // Skip form processing
             doGet(req, res);
             return;
-        }
-
-        boolean overrideEnabled = false;
-        if (null != req.getParameter("slackNotificationsOverrideEnabled") && req.getParameter("slackNotificationsOverrideEnabled").equals("on")) {
-            overrideEnabled = true;
-        }
-
-        boolean enabled = false;
-        if (null != req.getParameter("slackNotificationsEnabled") && req.getParameter("slackNotificationsEnabled").equals("on")) {
-          enabled = true;
-        }
-
-        boolean openedEnabled = false;
-        if (null != req.getParameter("slackNotificationsOpenedEnabled") && req.getParameter("slackNotificationsOpenedEnabled").equals("on")) {
-            openedEnabled = true;
-        }
-
-        boolean reopenedEnabled = false;
-        if (null != req.getParameter("slackNotificationsReopenedEnabled") && req.getParameter("slackNotificationsReopenedEnabled").equals("on")) {
-            reopenedEnabled = true;
-        }
-
-        boolean updatedEnabled = false;
-        if (null != req.getParameter("slackNotificationsUpdatedEnabled") && req.getParameter("slackNotificationsUpdatedEnabled").equals("on")) {
-            updatedEnabled = true;
-        }
-
-        boolean approvedEnabled = false;
-        if (null != req.getParameter("slackNotificationsApprovedEnabled") && req.getParameter("slackNotificationsApprovedEnabled").equals("on")) {
-            approvedEnabled = true;
-        }
-
-        boolean unapprovedEnabled = false;
-        if (null != req.getParameter("slackNotificationsUnapprovedEnabled") && req.getParameter("slackNotificationsUnapprovedEnabled").equals("on")) {
-            unapprovedEnabled = true;
-        }
-
-        boolean declinedEnabled = false;
-        if (null != req.getParameter("slackNotificationsDeclinedEnabled") && req.getParameter("slackNotificationsDeclinedEnabled").equals("on")) {
-            declinedEnabled = true;
-        }
-
-        boolean mergedEnabled = false;
-        if (null != req.getParameter("slackNotificationsMergedEnabled") && req.getParameter("slackNotificationsMergedEnabled").equals("on")) {
-            mergedEnabled = true;
-        }
-
-        boolean commentedEnabled = false;
-        if (null != req.getParameter("slackNotificationsCommentedEnabled") && req.getParameter("slackNotificationsCommentedEnabled").equals("on")) {
-            commentedEnabled = true;
-        }
-
-        boolean enabledPush = false;
-        if (null != req.getParameter("slackNotificationsEnabledForPush") && req.getParameter("slackNotificationsEnabledForPush").equals("on")) {
-            enabledPush = true;
-        }
-
-        boolean enabledPersonal = false;
-        if (null != req.getParameter("slackNotificationsEnabledForPersonal") && req.getParameter("slackNotificationsEnabledForPersonal").equals("on")) {
-            enabledPersonal = true;
         }
 
         NotificationLevel notificationLevel = NotificationLevel.VERBOSE;
@@ -126,27 +66,25 @@ public class SlackSettingsServlet extends HttpServlet {
             notificationPrLevel = NotificationLevel.valueOf(req.getParameter("slackNotificationPrLevel"));
         }
 
-        String channel = req.getParameter("slackChannelName");
-        String webHookUrl = req.getParameter("slackWebHookUrl");
         slackSettingsService.setSlackSettings(
                 repository,
                 new ImmutableSlackSettings(
-                        overrideEnabled,
-                        enabled,
-                        openedEnabled,
-                        reopenedEnabled,
-                        updatedEnabled,
-                        approvedEnabled,
-                        unapprovedEnabled,
-                        declinedEnabled,
-                        mergedEnabled,
-                        commentedEnabled,
-                        enabledPush,
-                        enabledPersonal,
+                        "on".equals(req.getParameter("slackNotificationsOverrideEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsOpenedEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsReopenedEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsUpdatedEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsApprovedEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsUnapprovedEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsDeclinedEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsMergedEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsCommentedEnabled")),
+                        "on".equals(req.getParameter("slackNotificationsEnabledForPush")),
+                        "on".equals(req.getParameter("slackNotificationsEnabledForPersonal")),
                         notificationLevel,
                         notificationPrLevel,
-                        channel,
-                        webHookUrl));
+                        req.getParameter("slackChannelName"),
+                        req.getParameter("slackWebHookUrl").trim()));
 
         doGet(req, res);
     }

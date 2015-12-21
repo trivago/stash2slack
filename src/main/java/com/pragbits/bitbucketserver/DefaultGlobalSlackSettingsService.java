@@ -5,6 +5,21 @@ import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 
 public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsService {
+    private static final String KEY_GLOBAL_SETTING_HOOK_URL = "stash2slack.globalsettings.hookurl";
+    private static final String KEY_GLOBAL_SETTING_CHANNEL_NAME = "stash2slack.globalsettings.channelname";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_ENABLED = "stash2slack.globalsettings.slacknotificationsenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_OPENED_ENABLED = "stash2slack.globalsettings.slacknotificationsopenedenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_REOPENED_ENABLED = "stash2slack.globalsettings.slacknotificationsreopenedenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_UPDATED_ENABLED = "stash2slack.globalsettings.slacknotificationsupdatedenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_APPROVED_ENABLED = "stash2slack.globalsettings.slacknotificationsapprovedenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_UNAPPROVED_ENABLED = "stash2slack.globalsettings.slacknotificationsunapprovedenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_DECLINED_ENABLED = "stash2slack.globalsettings.slacknotificationsdeclinedenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_MERGED_ENABLED = "stash2slack.globalsettings.slacknotificationsmergedenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_COMMENTED_ENABLED = "stash2slack.globalsettings.slacknotificationscommentedenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL = "stash2slack.globalsettings.slacknotificationslevel";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL = "stash2slack.globalsettings.slacknotificationsprlevel";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED = "stash2slack.globalsettings.slacknotificationspushenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED = "stash2slack.globalsettings.slacknotificationspersonalenabled";
 
     private final PluginSettings pluginSettings;
 
@@ -13,173 +28,175 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
     }
 
     @Override
-    public String getWebHookUrl(String key) {
-        Object retval = pluginSettings.get(key);
-        if (null == retval) {
-            return "";
-        }
-
-        return retval.toString();
+    public String getWebHookUrl() {
+        return getString(KEY_GLOBAL_SETTING_HOOK_URL);
     }
 
     @Override
-    public void setWebHookUrl(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setWebHookUrl(String value) {
+        pluginSettings.put(KEY_GLOBAL_SETTING_HOOK_URL, value);
     }
 
     @Override
-    public String getChannelName(String key) {
-        Object retval = pluginSettings.get(key);
-        if (null == retval) {
-            return "";
-        }
-
-        return retval.toString();
+    public String getChannelName() {
+        return getString(KEY_GLOBAL_SETTING_CHANNEL_NAME);
     }
 
     @Override
-    public void setChannelName(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setChannelName(String value) {
+        pluginSettings.put(KEY_GLOBAL_SETTING_CHANNEL_NAME, value);
     }
 
     @Override
-    public boolean getSlackNotificationsEnabled(String key) {
-        return Boolean.parseBoolean((String) pluginSettings.get(key));
+    public boolean getSlackNotificationsEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsOpenedEnabled(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsOpenedEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_OPENED_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsOpenedEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsOpenedEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_OPENED_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsReopenedEnabled(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsReopenedEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_REOPENED_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsReopenedEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsReopenedEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_REOPENED_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsUpdatedEnabled(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsUpdatedEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_UPDATED_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsUpdatedEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsUpdatedEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_UPDATED_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsApprovedEnabled(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsApprovedEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_APPROVED_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsApprovedEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsApprovedEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_APPROVED_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsUnapprovedEnabled(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsUnapprovedEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_UNAPPROVED_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsUnapprovedEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsUnapprovedEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_UNAPPROVED_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsDeclinedEnabled(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsDeclinedEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_DECLINED_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsDeclinedEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsDeclinedEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_DECLINED_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsMergedEnabled(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsMergedEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_MERGED_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsMergedEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsMergedEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_MERGED_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsCommentedEnabled(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsCommentedEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_COMMENTED_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsCommentedEnabled(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsCommentedEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_COMMENTED_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsEnabledForPush(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsEnabledForPush() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsEnabledForPush(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsEnabledForPush(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED, value);
     }
 
     @Override
-    public boolean getSlackNotificationsEnabledForPersonal(String key) {
-        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    public boolean getSlackNotificationsEnabledForPersonal() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED);
     }
 
     @Override
-    public void setSlackNotificationsEnabledForPersonal(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setSlackNotificationsEnabledForPersonal(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED, value);
     }
 
     @Override
-    public NotificationLevel getNotificationLevel(String key) {
-        Object retval = pluginSettings.get(key);
-        if (null == retval) {
+    public NotificationLevel getNotificationLevel() {
+        String value = getString(KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL);
+        if (value.isEmpty()) {
             return NotificationLevel.VERBOSE;
         } else {
-            return NotificationLevel.valueOf((String)pluginSettings.get(key));
+            return NotificationLevel.valueOf(value);
         }
     }
 
     @Override
-    public void setNotificationLevel(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setNotificationLevel(String value) {
+        pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL, value);
     }
 
     @Override
-    public NotificationLevel getNotificationPrLevel(String key) {
-        Object retval = pluginSettings.get(key);
-        if (null == retval) {
+    public NotificationLevel getNotificationPrLevel() {
+        String value = getString(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL);
+        if (value.isEmpty()) {
             return NotificationLevel.VERBOSE;
         } else {
-            return NotificationLevel.valueOf((String)pluginSettings.get(key));
+            return NotificationLevel.valueOf(value);
         }
     }
 
     @Override
-    public void setNotificationPrLevel(String key, String value) {
-        pluginSettings.put(key, value);
+    public void setNotificationPrLevel(String value) {
+        pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL, value);
     }
 
+    private String getString(String key) {
+        Object value = pluginSettings.get(key);
+        return null == value ? "" : value.toString();
+    }
+
+    private boolean getBoolean(String key) {
+        return Boolean.parseBoolean((String)pluginSettings.get(key));
+    }
+
+    private void setBoolean(String key, Boolean value) {
+        pluginSettings.put(key, value.toString());
+    }
 }
