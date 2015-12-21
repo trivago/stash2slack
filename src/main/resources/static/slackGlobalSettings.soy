@@ -1,6 +1,9 @@
 {namespace bitbucketserver.page.slack.global.settings}
 
 /**
+ * @param slackUsername
+ * @param slackIconUrl
+ * @param slackIconEmoji
  * @param slackGlobalWebHookUrl
  * @param slackChannelName
  * @param slackNotificationsEnabled
@@ -143,6 +146,27 @@
                     {param initialValue: $slackGlobalWebHookUrl /}
                     {param description: getText('stash2slack.global.settings.slack.webhook.description') /}
                 {/call}
+
+                 <h4>Additional configuration</h4>
+                 {call widget.aui.form.text}
+                     {param id: 'slackUsername' /}
+                     {param labelContent: getText('stash2slack.global.settings.slack.usernam') /}
+                     {param initialValue: $slackUsername /}
+                     {param description: getText('stash2slack.global.settings.slack.usernam.description') /}
+                 {/call}
+                 {call widget.aui.form.text}
+                     {param id: 'slackIconUrl' /}
+                     {param labelContent: getText('stash2slack.global.settings.slack.iconurl') /}
+                     {param initialValue: $slackIconUrl /}
+                     {param description: getText('stash2slack.global.settings.slack.iconurl.description') /}
+                 {/call}
+                 {call widget.aui.form.text}
+                     {param id: 'slackIconEmoji' /}
+                     {param labelContent: getText('stash2slack.global.settings.slack.iconemoji') /}
+                     {param initialValue: $slackIconEmoji /}
+                     {param description: getText('stash2slack.global.settings.slack.iconemoji.description') /}
+                 {/call}
+
                 {call aui.form.buttons}
                     {param content}
                         {call aui.form.submit}

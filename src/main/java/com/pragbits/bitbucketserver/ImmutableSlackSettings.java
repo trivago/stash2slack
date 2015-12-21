@@ -18,6 +18,10 @@ public class ImmutableSlackSettings implements SlackSettings {
     private final NotificationLevel notificationPrLevel;
     private final String slackChannelName;
     private final String slackWebHookUrl;
+    private final String slackUsername;
+    private final String slackIconUrl;
+    private final String slackIconEmoji;
+
 
     public ImmutableSlackSettings(boolean slackNotificationsOverrideEnabled,
                                   boolean slackNotificationsEnabled,
@@ -34,7 +38,10 @@ public class ImmutableSlackSettings implements SlackSettings {
                                   NotificationLevel notificationLevel,
                                   NotificationLevel notificationPrLevel,
                                   String slackChannelName,
-                                  String slackWebHookUrl) {
+                                  String slackWebHookUrl,
+                                  String slackUsername,
+                                  String slackIconUrl,
+                                  String slackIconEmoji) {
         this.slackNotificationsOverrideEnabled = slackNotificationsOverrideEnabled;
         this.slackNotificationsEnabled = slackNotificationsEnabled;
         this.slackNotificationsOpenedEnabled = slackNotificationsOpenedEnabled;
@@ -51,6 +58,9 @@ public class ImmutableSlackSettings implements SlackSettings {
         this.notificationPrLevel = notificationPrLevel;
         this.slackChannelName = slackChannelName;
         this.slackWebHookUrl = slackWebHookUrl;
+        this.slackUsername = slackUsername;
+        this.slackIconUrl = slackIconUrl;
+        this.slackIconEmoji = slackIconEmoji;
     }
 
     public boolean isSlackNotificationsOverrideEnabled() {
@@ -115,6 +125,18 @@ public class ImmutableSlackSettings implements SlackSettings {
         return slackWebHookUrl;
     }
 
+    public String getSlackUserName() {
+        return slackUsername;
+    }
+
+    public String getSlackIconUrl() {
+        return slackIconUrl;
+    }
+
+    public String getSlackIconEmoji() {
+        return slackIconEmoji;
+    }
+
     @Override
     public String toString() {
         return "ImmutableSlackSettings {" + "slackNotificationsOverrideEnabled=" + slackNotificationsOverrideEnabled +
@@ -132,7 +154,11 @@ public class ImmutableSlackSettings implements SlackSettings {
                 ", notificationLevel=" + notificationLevel +
                 ", notificationPrLevel=" + notificationPrLevel +
                 ", slackChannelName=" + slackChannelName +
-                ", slackWebHookUrl=" + slackWebHookUrl + "}";
+                ", slackWebHookUrl=" + slackWebHookUrl +
+                ", slackUsername=" + slackUsername +
+                ", slackIconUrl=" + slackIconUrl +
+                ", slackIconEmoji=" + slackIconEmoji +
+                "}";
     }
 
 }

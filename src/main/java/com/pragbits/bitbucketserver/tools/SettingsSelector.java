@@ -39,7 +39,10 @@ public class SettingsSelector {
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getNotificationLevel() : slackGlobalSettingsService.getNotificationLevel(),
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getNotificationPrLevel() : slackGlobalSettingsService.getNotificationPrLevel(),
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getSlackChannelName() : slackGlobalSettingsService.getChannelName(),
-                slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getSlackWebHookUrl() : slackGlobalSettingsService.getWebHookUrl()
+                slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getSlackWebHookUrl() : slackGlobalSettingsService.getWebHookUrl(),
+                slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getSlackUserName() : slackGlobalSettingsService.getUsername(),
+                slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getSlackIconUrl() : slackGlobalSettingsService.getIconUrl(),
+                slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getSlackIconEmoji() : slackGlobalSettingsService.getIconEmoji()
         );
     }
 

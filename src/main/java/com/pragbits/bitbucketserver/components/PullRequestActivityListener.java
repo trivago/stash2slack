@@ -128,6 +128,9 @@ public class PullRequestActivityListener {
             SlackPayload payload = new SlackPayload();
             payload.setMrkdwn(true);
             payload.setLinkNames(true);
+            payload.setUsername(resolvedSlackSettings.getSlackUserName());
+            payload.setIconUrl(resolvedSlackSettings.getSlackIconUrl());
+            payload.setIconEmoji(resolvedSlackSettings.getSlackIconEmoji());
 
             SlackAttachment attachment = new SlackAttachment();
             attachment.setAuthorName(userName);

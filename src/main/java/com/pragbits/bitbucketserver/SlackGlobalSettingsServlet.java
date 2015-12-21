@@ -51,6 +51,9 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
 
         slackGlobalSettingsService.setWebHookUrl(req.getParameter("slackGlobalWebHookUrl").trim());
         slackGlobalSettingsService.setChannelName(req.getParameter("slackChannelName"));
+        slackGlobalSettingsService.setUsername(req.getParameter("slackUsername"));
+        slackGlobalSettingsService.setIconUrl(req.getParameter("slackIconUrl"));
+        slackGlobalSettingsService.setIconEmoji(req.getParameter("slackIconEmoji"));
 
         slackGlobalSettingsService.setSlackNotificationsEnabled(bool(req, "slackNotificationsEnabled"));
         slackGlobalSettingsService.setSlackNotificationsOpenedEnabled(bool(req, "slackNotificationsOpenedEnabled"));
@@ -94,6 +97,9 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
 
         String webHookUrl = slackGlobalSettingsService.getWebHookUrl();
         String channelName = slackGlobalSettingsService.getChannelName();
+        String userName = slackGlobalSettingsService.getUsername();
+        String iconUrl = slackGlobalSettingsService.getIconUrl();
+        String iconEmoji = slackGlobalSettingsService.getIconEmoji();
         Boolean slackNotificationsEnabled = slackGlobalSettingsService.getSlackNotificationsEnabled();
         Boolean slackNotificationsOpenedEnabled = slackGlobalSettingsService.getSlackNotificationsOpenedEnabled();
         Boolean slackNotificationsReopenedEnabled = slackGlobalSettingsService.getSlackNotificationsReopenedEnabled();
@@ -127,6 +133,9 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
                         .put("notificationLevel", notificationLevel)
                         .put("notificationPrLevel", notificationPrLevel)
                         .put("notificationLevels", new SelectFieldOptions(NotificationLevel.values()).toSoyStructure())
+                        .put("slackUsername", userName)
+                        .put("slackIconUrl", iconUrl)
+                        .put("slackIconEmoji", iconEmoji)
                         .build()
         );
     }

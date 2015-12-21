@@ -20,6 +20,9 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
     private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL = "stash2slack.globalsettings.slacknotificationsprlevel";
     private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED = "stash2slack.globalsettings.slacknotificationspushenabled";
     private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED = "stash2slack.globalsettings.slacknotificationspersonalenabled";
+    private static final String KEY_GLOBAL_SETTING_USER_NAME = "stash2slack.globalsettings.username";
+    private static final String KEY_GLOBAL_SETTING_ICON_URL = "stash2slack.globalsettings.iconurl";
+    private static final String KEY_GLOBAL_SETTING_ICON_EMOJI = "stash2slack.globalsettings.iconemojil";
 
     private final PluginSettings pluginSettings;
 
@@ -185,6 +188,40 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
     @Override
     public void setNotificationPrLevel(String value) {
         pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL, value);
+    }
+
+    @Override
+    public String getUsername() {
+        String userName = getString(KEY_GLOBAL_SETTING_USER_NAME);
+        if (null == userName) {
+            return "Stash";
+        }
+        return userName.toString();
+    }
+
+    @Override
+    public void setUsername(String value) {
+        pluginSettings.put(KEY_GLOBAL_SETTING_USER_NAME, value);
+    }
+
+    @Override
+    public String getIconUrl() {
+        return getString(KEY_GLOBAL_SETTING_ICON_URL);
+    }
+
+    @Override
+    public void setIconUrl(String value) {
+        pluginSettings.put(KEY_GLOBAL_SETTING_ICON_URL, value);
+    }
+
+    @Override
+    public String getIconEmoji() {
+        return getString(KEY_GLOBAL_SETTING_ICON_EMOJI);
+    }
+
+    @Override
+    public void setIconEmoji(String value) {
+        pluginSettings.put(KEY_GLOBAL_SETTING_ICON_EMOJI, value);
     }
 
     private String getString(String key) {

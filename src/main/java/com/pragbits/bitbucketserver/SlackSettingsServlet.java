@@ -84,7 +84,12 @@ public class SlackSettingsServlet extends HttpServlet {
                         notificationLevel,
                         notificationPrLevel,
                         req.getParameter("slackChannelName"),
-                        req.getParameter("slackWebHookUrl").trim()));
+                        req.getParameter("slackWebHookUrl").trim(),
+                        req.getParameter("slackUsername").trim(),
+                        req.getParameter("slackIconUrl").trim(),
+                        req.getParameter("slackIconEmoji").trim()
+                )
+        );
 
         doGet(req, res);
     }

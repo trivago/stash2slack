@@ -34,8 +34,12 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
             false,  // personal (forks) enabled
             NotificationLevel.VERBOSE,
             NotificationLevel.VERBOSE,
-            "",     // channel name override
-            "");    // webhook override
+            "",         // channel name override
+            "",         // webhook override
+            "Stash",    // username override
+            "https://slack.com/img/icons/app-57.png", // iconUrl override
+            ":slack:"   // iconEmoji override
+    );
 
     static final String KEY_SLACK_OVERRIDE_NOTIFICATION = "slackNotificationsOverrideEnabled";
     static final String KEY_SLACK_NOTIFICATION = "slackNotificationsEnabled";
@@ -53,6 +57,9 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
     static final String KEY_SLACK_NOTIFICATION_PR_LEVEL = "slackNotificationPrLevel";
     static final String KEY_SLACK_CHANNEL_NAME = "slackChannelName";
     static final String KEY_SLACK_WEBHOOK_URL = "slackWebHookUrl";
+    static final String KEY_SLACK_USER_NAME = "slackUsername";
+    static final String KEY_SLACK_ICON_URL = "slackIconUrl";
+    static final String KEY_SLACK_ICON_EMOJI = "slackIconEmojil";
 
     private final PluginSettings pluginSettings;
     private final PermissionValidationService validationService;
@@ -117,6 +124,9 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
                 .put(KEY_SLACK_NOTIFICATION_PR_LEVEL, settings.getNotificationPrLevel().toString())
                 .put(KEY_SLACK_CHANNEL_NAME, settings.getSlackChannelName().isEmpty() ? " " : settings.getSlackChannelName())
                 .put(KEY_SLACK_WEBHOOK_URL, settings.getSlackWebHookUrl().isEmpty() ? " " : settings.getSlackWebHookUrl())
+                .put(KEY_SLACK_USER_NAME, settings.getSlackUserName().isEmpty() ? " " : settings.getSlackUserName())
+                .put(KEY_SLACK_ICON_URL, settings.getSlackIconUrl().isEmpty() ? " " : settings.getSlackIconUrl())
+                .put(KEY_SLACK_ICON_EMOJI, settings.getSlackIconEmoji().isEmpty() ? " " : settings.getSlackIconEmoji())
                 .build();
 
         return  immutableMap;
@@ -141,7 +151,10 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
                 settings.containsKey(KEY_SLACK_NOTIFICATION_LEVEL) ? NotificationLevel.valueOf(settings.get(KEY_SLACK_NOTIFICATION_LEVEL)) : NotificationLevel.VERBOSE,
                 settings.containsKey(KEY_SLACK_NOTIFICATION_PR_LEVEL) ? NotificationLevel.valueOf(settings.get(KEY_SLACK_NOTIFICATION_PR_LEVEL)) : NotificationLevel.VERBOSE,
                 settings.get(KEY_SLACK_CHANNEL_NAME).toString().equals(" ") ? "" : settings.get(KEY_SLACK_CHANNEL_NAME).toString(),
-                settings.get(KEY_SLACK_WEBHOOK_URL).toString().equals(" ") ? "" : settings.get(KEY_SLACK_WEBHOOK_URL).toString()
+                settings.get(KEY_SLACK_WEBHOOK_URL).toString().equals(" ") ? "" : settings.get(KEY_SLACK_WEBHOOK_URL).toString(),
+                settings.get(KEY_SLACK_USER_NAME).toString().equals(" ") ? "" : settings.get(KEY_SLACK_USER_NAME).toString(),
+                settings.get(KEY_SLACK_ICON_URL).toString().equals(" ") ? "" : settings.get(KEY_SLACK_ICON_URL).toString(),
+                settings.get(KEY_SLACK_ICON_EMOJI).toString().equals(" ") ? "" : settings.get(KEY_SLACK_ICON_EMOJI).toString()
         );
     }
 

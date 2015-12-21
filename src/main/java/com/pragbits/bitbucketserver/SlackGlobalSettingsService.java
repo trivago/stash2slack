@@ -49,4 +49,14 @@ public interface SlackGlobalSettingsService {
 
     boolean getSlackNotificationsEnabledForPersonal();
     void setSlackNotificationsEnabledForPersonal(boolean value);
+
+    String getUsername();
+    void setUsername(String value);
+
+    String getIconUrl();
+    void setIconUrl(String value);
+
+    String getIconEmoji();
+    void setIconEmoji(String value);
+
 }
