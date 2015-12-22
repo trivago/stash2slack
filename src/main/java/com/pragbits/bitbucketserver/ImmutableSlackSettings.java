@@ -125,7 +125,7 @@ public class ImmutableSlackSettings implements SlackSettings {
         return slackWebHookUrl;
     }
 
-    public String getSlackUserName() {
+    public String getSlackUsername() {
         return slackUsername;
     }
 

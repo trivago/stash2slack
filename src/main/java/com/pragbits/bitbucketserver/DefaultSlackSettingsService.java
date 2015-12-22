@@ -36,9 +36,9 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
             NotificationLevel.VERBOSE,
             "",         // channel name override
             "",         // webhook override
-            "Stash",    // username override
-            "https://slack.com/img/icons/app-57.png", // iconUrl override
-            ":slack:"   // iconEmoji override
+            "",         // username override
+            "",         // iconUrl override
+            ""          // iconEmoji override
     );
 
     static final String KEY_SLACK_OVERRIDE_NOTIFICATION = "slackNotificationsOverrideEnabled";
@@ -124,7 +124,7 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
                 .put(KEY_SLACK_NOTIFICATION_PR_LEVEL, settings.getNotificationPrLevel().toString())
                 .put(KEY_SLACK_CHANNEL_NAME, settings.getSlackChannelName().isEmpty() ? " " : settings.getSlackChannelName())
                 .put(KEY_SLACK_WEBHOOK_URL, settings.getSlackWebHookUrl().isEmpty() ? " " : settings.getSlackWebHookUrl())
-                .put(KEY_SLACK_USER_NAME, settings.getSlackUserName().isEmpty() ? " " : settings.getSlackUserName())
+                .put(KEY_SLACK_USER_NAME, settings.getSlackUsername().isEmpty() ? " " : settings.getSlackUsername())
                 .put(KEY_SLACK_ICON_URL, settings.getSlackIconUrl().isEmpty() ? " " : settings.getSlackIconUrl())
                 .put(KEY_SLACK_ICON_EMOJI, settings.getSlackIconEmoji().isEmpty() ? " " : settings.getSlackIconEmoji())
                 .build();

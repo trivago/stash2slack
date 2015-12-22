@@ -138,6 +138,28 @@
                     {param initialValue: $slackSettings.slackWebHookUrl /}
                     {param description: getText('stash2slack.local.settings.slack.webhookurl.description') /}
                 {/call}
+
+                <h4>Additional configuration</h4>
+                {call widget.aui.form.text}
+                    {param id: 'slackUsername' /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.username') /}
+                    {param initialValue: $slackSettings.slackUsername /}
+                    {param description: getText('stash2slack.local.settings.slack.username.description') /}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'slackIconUrl' /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.iconurl') /}
+                    {param initialValue: $slackSettings.slackIconUrl /}
+                    {param description: getText('stash2slack.local.settings.slack.iconurl.description') /}
+                {/call}
+                {call widget.aui.form.text}
+                    {param id: 'slackIconEmoji' /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.iconemoji') /}
+                    {param initialValue: $slackSettings.slackIconEmoji /}
+                    {param description: getText('stash2slack.local.settings.slack.iconemoji.description') /}
+                {/call}
+
+
                 {call aui.form.buttons}
                     {param content}
                         {call aui.form.submit}
