@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class RepositoryPushActivityListener {
     private static final Logger log = LoggerFactory.getLogger(RepositoryPushActivityListener.class);
@@ -170,16 +171,21 @@ public class RepositoryPushActivityListener {
 
                 // slackSettings.getSlackChannelName might be:
                 // - empty
-                // - comma separated list of channel names, eg: #mych1, #mych2, #mych3
+                // - single channel value
+                // - comma separated list of pairs (pattern, channel) eg: bugfix/.*->#test-bf,master->#test-master
 
-                if (channelSelector.getSelectedChannel().isEmpty()) {
+                if (channelSelector.isEmptyOrSingleValue()) {
+                    log.debug("#sending message to: " + payload.getChannel());
                     slackNotifier.SendSlackNotification(hookSelector.getSelectedHook(), gson.toJson(payload));
                 } else {
-                    // send message to multiple channels
-                    List<String> channels = Arrays.asList(channelSelector.getSelectedChannel().split("\\s*,\\s*"));
-                    for (String channel: channels) {
-                        payload.setChannel(channel.trim());
-                        slackNotifier.SendSlackNotification(hookSelector.getSelectedHook(), gson.toJson(payload));
+                    Map<String, String> patterns = channelSelector.getChannels();
+                    for (String pattern: patterns.keySet()) {
+                        if (ref.replace("refs/heads/", "").matches(pattern)) {
+                            payload.setChannel(patterns.get(pattern));
+                            log.debug("#sending message to: " + payload.getChannel());
+                            slackNotifier.SendSlackNotification(hookSelector.getSelectedHook(), gson.toJson(payload));
+                            break;
+                        }
                     }
                 }
             }
