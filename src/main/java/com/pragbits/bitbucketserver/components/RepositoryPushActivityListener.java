@@ -151,6 +151,9 @@ public class RepositoryPushActivityListener {
 
                 SlackPayload payload = new SlackPayload();
 
+                if (!resolvedSlackSettings.getSlackIconEmoji().isEmpty()) {
+                    text = resolvedSlackSettings.getSlackIconEmoji() + " " + text;
+                }
                 payload.setText(text);
                 payload.setMrkdwn(true);
                 payload.setUsername(resolvedSlackSettings.getSlackUsername());
