@@ -3,6 +3,7 @@ package com.pragbits.bitbucketserver;
 
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
+import com.google.common.base.Strings;
 
 public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsService {
     private static final String KEY_GLOBAL_SETTING_HOOK_URL = "stash2slack.globalsettings.hookurl";
@@ -37,7 +38,11 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
 
     @Override
     public void setWebHookUrl(String value) {
-        pluginSettings.put(KEY_GLOBAL_SETTING_HOOK_URL, value);
+        if (!Strings.isNullOrEmpty(value)) {
+            pluginSettings.put(KEY_GLOBAL_SETTING_HOOK_URL, value);
+        } else {
+            pluginSettings.put(KEY_GLOBAL_SETTING_HOOK_URL, null);
+        }
     }
 
     @Override
@@ -47,7 +52,11 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
 
     @Override
     public void setChannelName(String value) {
-        pluginSettings.put(KEY_GLOBAL_SETTING_CHANNEL_NAME, value);
+        if (!Strings.isNullOrEmpty(value)) {
+            pluginSettings.put(KEY_GLOBAL_SETTING_CHANNEL_NAME, value);
+        } else {
+            pluginSettings.put(KEY_GLOBAL_SETTING_CHANNEL_NAME, null);
+        }
     }
 
     @Override
@@ -172,7 +181,11 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
 
     @Override
     public void setNotificationLevel(String value) {
-        pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL, value);
+        if (!Strings.isNullOrEmpty(value)) {
+            pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL, value);
+        } else {
+            pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_LEVEL, null);
+        }
     }
 
     @Override
@@ -187,7 +200,11 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
 
     @Override
     public void setNotificationPrLevel(String value) {
-        pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL, value);
+        if (!Strings.isNullOrEmpty(value)) {
+            pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL, value);
+        } else {
+            pluginSettings.put(KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL, null);
+        }
     }
 
     @Override
@@ -201,7 +218,11 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
 
     @Override
     public void setUsername(String value) {
-        pluginSettings.put(KEY_GLOBAL_SETTING_USER_NAME, value);
+        if (!Strings.isNullOrEmpty(value)) {
+            pluginSettings.put(KEY_GLOBAL_SETTING_USER_NAME, value);
+        } else {
+            pluginSettings.put(KEY_GLOBAL_SETTING_USER_NAME, null);
+        }
     }
 
     @Override
@@ -211,7 +232,11 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
 
     @Override
     public void setIconUrl(String value) {
-        pluginSettings.put(KEY_GLOBAL_SETTING_ICON_URL, value);
+        if (!Strings.isNullOrEmpty(value)) {
+            pluginSettings.put(KEY_GLOBAL_SETTING_ICON_URL, value);
+        } else {
+            pluginSettings.put(KEY_GLOBAL_SETTING_ICON_URL, null);
+        }
     }
 
     @Override
@@ -221,7 +246,11 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
 
     @Override
     public void setIconEmoji(String value) {
-        pluginSettings.put(KEY_GLOBAL_SETTING_ICON_EMOJI, value);
+        if (!Strings.isNullOrEmpty(value)) {
+            pluginSettings.put(KEY_GLOBAL_SETTING_ICON_EMOJI, value);
+        } else {
+            pluginSettings.put(KEY_GLOBAL_SETTING_ICON_EMOJI, null);
+        }
     }
 
     private String getString(String key) {
