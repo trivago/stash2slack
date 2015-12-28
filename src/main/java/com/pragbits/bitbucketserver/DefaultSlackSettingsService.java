@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableMap;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -150,11 +151,11 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
                 Boolean.parseBoolean(settings.get(KEY_SLACK_NOTIFICATION_PERSONAL)),
                 settings.containsKey(KEY_SLACK_NOTIFICATION_LEVEL) ? NotificationLevel.valueOf(settings.get(KEY_SLACK_NOTIFICATION_LEVEL)) : NotificationLevel.VERBOSE,
                 settings.containsKey(KEY_SLACK_NOTIFICATION_PR_LEVEL) ? NotificationLevel.valueOf(settings.get(KEY_SLACK_NOTIFICATION_PR_LEVEL)) : NotificationLevel.VERBOSE,
-                settings.get(KEY_SLACK_CHANNEL_NAME).toString().equals(" ") ? "" : settings.get(KEY_SLACK_CHANNEL_NAME).toString(),
-                settings.get(KEY_SLACK_WEBHOOK_URL).toString().equals(" ") ? "" : settings.get(KEY_SLACK_WEBHOOK_URL).toString(),
-                settings.get(KEY_SLACK_USER_NAME).toString().equals(" ") ? "" : settings.get(KEY_SLACK_USER_NAME).toString(),
-                settings.get(KEY_SLACK_ICON_URL).toString().equals(" ") ? "" : settings.get(KEY_SLACK_ICON_URL).toString(),
-                settings.get(KEY_SLACK_ICON_EMOJI).toString().equals(" ") ? "" : settings.get(KEY_SLACK_ICON_EMOJI).toString()
+                Objects.toString(settings.get(KEY_SLACK_CHANNEL_NAME), " ").equals(" ") ? "" : settings.get(KEY_SLACK_CHANNEL_NAME),
+                Objects.toString(settings.get(KEY_SLACK_WEBHOOK_URL),  " ").equals(" ") ? "" : settings.get(KEY_SLACK_WEBHOOK_URL),
+                Objects.toString(settings.get(KEY_SLACK_USER_NAME),    " ").equals(" ") ? "" : settings.get(KEY_SLACK_USER_NAME),
+                Objects.toString(settings.get(KEY_SLACK_ICON_URL),     " ").equals(" ") ? "" : settings.get(KEY_SLACK_ICON_URL),
+                Objects.toString(settings.get(KEY_SLACK_ICON_EMOJI),   " ").equals(" ") ? "" : settings.get(KEY_SLACK_ICON_EMOJI)
         );
     }
 
