@@ -313,6 +313,9 @@ public class PullRequestActivityListener {
 
             if (channelSelector.isEmptyOrSingleValue()) {
                 log.debug("#sending message to: " + payload.getChannel());
+                if (channelSelector.getSelectedChannel() != "") {
+                    payload.setChannel(channelSelector.getSelectedChannel());
+                }
                 slackNotifier.SendSlackNotification(hookSelector.getSelectedHook(), gson.toJson(payload));
             } else {
                 Map<String, String> patterns = channelSelector.getChannels();
