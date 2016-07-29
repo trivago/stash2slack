@@ -18,22 +18,4 @@
     <bean id="slackNotifier" class="com.pragbits.bitbucketserver.tools.SlackNotifier">
     </bean>
 
-    <bean id="pullRequestActivityListener"
-          class="com.pragbits.bitbucketserver.components.PullRequestActivityListener">
-        <constructor-arg index="0" ref="slackGlobalSettingsService" />
-        <constructor-arg index="1" ref="slackSettingsService" />
-        <constructor-arg index="2" ref="navBuilder" />
-        <constructor-arg index="3" ref="slackNotifier" />
-        <constructor-arg index="4" ref="avatarService" />
-    </bean>
-
-    <bean id="repositoryPushActivityListener"
-          class="com.pragbits.bitbucketserver.components.RepositoryPushActivityListener">
-        <constructor-arg index="0" ref="slackGlobalSettingsService" />
-        <constructor-arg index="1" ref="slackSettingsService" />
-        <constructor-arg index="2" ref="commitService" />
-        <constructor-arg index="3" ref="navBuilder" />
-        <constructor-arg index="4" ref="slackNotifier" />
-    </bean>
-
 </beans>
