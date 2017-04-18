@@ -16,8 +16,6 @@ import com.pragbits.bitbucketserver.tools.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,6 +58,9 @@ public class PullRequestActivityListener {
             String localHookUrl = resolvedSlackSettings.getSlackWebHookUrl();
             WebHookSelector hookSelector = new WebHookSelector(globalHookUrl, localHookUrl);
             ChannelSelector channelSelector = new ChannelSelector(slackGlobalSettingsService.getChannelName(), slackSettings.getSlackChannelName());
+
+            log.debug("SelectedHook: " + hookSelector.getSelectedHook());
+            log.debug("SelectedChannel: " + channelSelector.getSelectedChannel());
 
             if (!hookSelector.isHookValid()) {
                 log.error("There is no valid configured Web hook url! Reason: " + hookSelector.getProblem());

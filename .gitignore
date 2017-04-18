@@ -28,6 +28,10 @@
 # Mongo Explorer plugin:
 # .idea/mongoSettings.xml
 
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
 ## File-based project format:
 *.ipr
 *.iws
