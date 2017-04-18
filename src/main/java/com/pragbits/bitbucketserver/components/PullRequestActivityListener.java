@@ -59,6 +59,9 @@ public class PullRequestActivityListener {
             WebHookSelector hookSelector = new WebHookSelector(globalHookUrl, localHookUrl);
             ChannelSelector channelSelector = new ChannelSelector(slackGlobalSettingsService.getChannelName(), slackSettings.getSlackChannelName());
 
+            log.debug("SelectedHook: " + hookSelector.getSelectedHook());
+            log.debug("SelectedChannel: " + channelSelector.getSelectedChannel());
+
             if (!hookSelector.isHookValid()) {
                 log.error("There is no valid configured Web hook url! Reason: " + hookSelector.getProblem());
                 return;

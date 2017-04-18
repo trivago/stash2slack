@@ -30,3 +30,17 @@ Then, for each repository those settings can be overriden if needed.
 Pull requests can be further filtered by events (opened, commented, etc). Also, notifications can be verbose,
 compact or minimal to slack.
 
+## Contributing
+
+Stash2Slack is built using Atlassian SDK, here's some info on that...
+
+Here are the SDK commands you'll use immediately:
+
+* atlas-run -- installs this plugin into the product and starts it on localhost
+* atlas-debug -- same as atlas-run, but allows a debugger to attach at port 5005
+* atlas-cli -- after atlas-run or atlas-debug, opens a Maven command line window: - 'pi' reinstalls the plugin into the running product instance
+* atlas-help -- prints description for all commands in the SDK
+
+Full documentation is always available at:
+
+https://developer.atlassian.com/display/DOCS/Introduction+to+the+Atlassian+Plugin+SDK
