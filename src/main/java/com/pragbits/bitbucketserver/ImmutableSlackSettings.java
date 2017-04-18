@@ -14,6 +14,7 @@ public class ImmutableSlackSettings implements SlackSettings {
     private final boolean slackNotificationsCommentedEnabled;
     private final boolean slackNotificationsEnabledForPush;
     private final boolean slackNotificationsEnabledForPersonal;
+    private final boolean slackNotificationsNeedsWorkEnabled;
     private final NotificationLevel notificationLevel;
     private final NotificationLevel notificationPrLevel;
     private final String slackChannelName;
@@ -35,6 +36,7 @@ public class ImmutableSlackSettings implements SlackSettings {
                                   boolean slackNotificationsCommentedEnabled,
                                   boolean slackNotificationsEnabledForPush,
                                   boolean slackNotificationsEnabledForPersonal,
+                                  boolean slackNotificationsNeedsWorkEnabled,
                                   NotificationLevel notificationLevel,
                                   NotificationLevel notificationPrLevel,
                                   String slackChannelName,
@@ -54,6 +56,7 @@ public class ImmutableSlackSettings implements SlackSettings {
         this.slackNotificationsCommentedEnabled = slackNotificationsCommentedEnabled;
         this.slackNotificationsEnabledForPush = slackNotificationsEnabledForPush;
         this.slackNotificationsEnabledForPersonal = slackNotificationsEnabledForPersonal;
+        this.slackNotificationsNeedsWorkEnabled = slackNotificationsNeedsWorkEnabled;
         this.notificationLevel = notificationLevel;
         this.notificationPrLevel = notificationPrLevel;
         this.slackChannelName = slackChannelName;
@@ -107,7 +110,13 @@ public class ImmutableSlackSettings implements SlackSettings {
         return slackNotificationsEnabledForPush;
     }
 
-    public boolean isSlackNotificationsEnabledForPersonal() { return slackNotificationsEnabledForPersonal; }
+    public boolean isSlackNotificationsEnabledForPersonal() {
+        return slackNotificationsEnabledForPersonal;
+    }
+
+    public boolean isSlackNotificationsNeedsWorkEnabled() {
+        return slackNotificationsNeedsWorkEnabled;
+    }
 
     public NotificationLevel getNotificationLevel() {
         return notificationLevel;
