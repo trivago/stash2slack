@@ -20,7 +20,6 @@ import com.pragbits.bitbucketserver.tools.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +58,8 @@ public class RepositoryPushActivityListener {
 
         if (resolvedSlackSettings.isSlackNotificationsEnabledForPush()) {
             String localHookUrl = slackSettings.getSlackWebHookUrl();
+
+            //TODO: Do we need the WebHookSelector? Already resolved.
             WebHookSelector hookSelector = new WebHookSelector(globalHookUrl, localHookUrl);
             ChannelSelector channelSelector = new ChannelSelector(slackGlobalSettingsService.getChannelName(), slackSettings.getSlackChannelName());
 
@@ -72,7 +73,7 @@ public class RepositoryPushActivityListener {
                 return;
             }
 
-            String repoName = repository.getSlug();
+            String repoSlug = repository.getSlug();
             String projectName = repository.getProject().getKey();
 
             String repoPath = projectName + "/" + event.getRepository().getName();
@@ -82,7 +83,8 @@ public class RepositoryPushActivityListener {
                 String ref = refChange.getRef().getId();
                 NavBuilder.Repo repoUrlBuilder = navBuilder
                         .project(projectName)
-                        .repo(repoName);
+                        .repo(repoSlug);
+
                 String url = repoUrlBuilder
                         .commits()
                         .until(refChange.getRef().getId())
@@ -146,6 +148,8 @@ public class RepositoryPushActivityListener {
                             commitCount, commitStr,
                             url);
                 }
+
+                log.debug("text: " + text);
 
                 // Figure out what type of change this is:
 
