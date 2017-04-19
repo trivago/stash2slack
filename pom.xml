@@ -18,7 +18,7 @@
         <bitbucket.version>4.13.0</bitbucket.version>
         <bitbucket.data.version>${bitbucket.version}</bitbucket.data.version>
         <atlassian-sal-api.version>3.0.5</atlassian-sal-api.version>
-        <amps.version>6.1.0</amps.version>
+        <amps.version>6.2.11</amps.version>
     </properties>
 
     <dependencyManagement>
@@ -129,25 +129,15 @@
                 <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <products>
-                        <product>
-                            <id>bitbucket</id>
-                            <instanceId>bitbucket</instanceId>
-                            <version>${bitbucket.version}</version>
-                            <dataVersion>${bitbucket.data.version}</dataVersion>
-                        </product>
-                    </products>
+                    <allowGoogleTracking>false</allowGoogleTracking>
                     <enableQuickReload>true</enableQuickReload>
                     <enableFastdev>false</enableFastdev>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>bitbucket-maven-plugin</artifactId>
-                <version>${amps.version}</version>
-                <extensions>true</extensions>
-                <configuration>
+                    <enableDevToolbox>false</enableDevToolbox>
+                    <enablePde>false</enablePde>
+                    <skipRestDocGeneration>true</skipRestDocGeneration>
                     <allowGoogleTracking>false</allowGoogleTracking>
+                    <skipManifestValidation>true</skipManifestValidation>
+                    <extractDependencies>false</extractDependencies>
                     <server>localhost</server>
                     <!--
                          #Bitbucket Plugin development
@@ -168,7 +158,7 @@
                             <version>${bitbucket.version}</version>
                             <dataVersion>${bitbucket.data.version}</dataVersion>
                         </product>
-                        <!-- node 1 for clustered -->
+                        <!-- node 1 for datacenter configuration -->
                         <product>
                             <id>bitbucket</id>
                             <instanceId>bitbucket-node-1</instanceId>
@@ -201,7 +191,7 @@
                                 </libArtifact>
                             </libArtifacts>
                         </product>
-                        <!-- Node 2 -->
+                        <!-- node 2 for datacenter configuration-->
                         <product>
                             <id>bitbucket</id>
                             <instanceId>bitbucket-node-2</instanceId>
