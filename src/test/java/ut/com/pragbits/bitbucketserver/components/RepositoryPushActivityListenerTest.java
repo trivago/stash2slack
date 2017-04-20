@@ -123,10 +123,11 @@ public class RepositoryPushActivityListenerTest {
   }
 
   @Test
-  public void notifySlackChannelNotInvokedWhenForkedRepo() throws Exception {
+  public void notifySlackChannelNotInvokedWhenForkedRepoAndOptionDisabled() throws Exception {
     when(slackSettings.isSlackNotificationsEnabledForPush()).thenReturn(true);
 
     when(repository.isFork()).thenReturn(true);
+    when(slackSettings.isSlackNotificationsEnabledForPersonal()).thenReturn(false);
     when(slackGlobalSettingsService.getSlackNotificationsEnabledForPersonal()).thenReturn(false);
 
     RepositoryPushActivityListener listener = new RepositoryPushActivityListener(slackGlobalSettingsService, slackSettingsService, commitService, navBuilder, slackNotifier);
@@ -142,7 +143,7 @@ public class RepositoryPushActivityListenerTest {
     RepositoryPushActivityListener listener = new RepositoryPushActivityListener(slackGlobalSettingsService, slackSettingsService, commitService, navBuilder, slackNotifier);
     listener.NotifySlackChannel(event);
 
-    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.LOCAL_SETTINGS_JSON_PAYLOAD));
+    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.PUSH_OVERRIDE_SETTINGS_PAYLOAD));
   }
 
   @Test
@@ -154,7 +155,7 @@ public class RepositoryPushActivityListenerTest {
     RepositoryPushActivityListener listener = new RepositoryPushActivityListener(slackGlobalSettingsService, slackSettingsService, commitService, navBuilder, slackNotifier);
     listener.NotifySlackChannel(event);
 
-    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.BUGFIX_CHANNEL_JSON_PAYLOAD));
+    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.PUSH_BUGFIX_CHANNEL_PAYLOAD));
   }
 
   @Test
@@ -166,7 +167,7 @@ public class RepositoryPushActivityListenerTest {
     RepositoryPushActivityListener listener = new RepositoryPushActivityListener(slackGlobalSettingsService, slackSettingsService, commitService, navBuilder, slackNotifier);
     listener.NotifySlackChannel(event);
 
-    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.JSON_PAYLOAD_NO_CHANNEL));
+    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.PUSH_NO_CHANNEL_PAYLOAD));
   }
 
 }
