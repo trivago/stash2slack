@@ -71,4 +71,8 @@ public class TestFixtures {
                                                       "\"icon_emoji\":\":rocket:\"}";
 
   public static final String BUGFIX_REF_ID = "refs/heads/bugfix/mybughere";
+
+  public static final String SLACK_LOCAL_HOOK_URL = "https://hooks.slack.com/localhook";
+
+  public static final String SLACK_GLOBAL_HOOK_URL = "https://hooks.slack.com/globalhook";
 }

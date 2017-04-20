@@ -65,13 +65,13 @@ public class PullRequestActivityListenerTest {
     when(forkedRepository.getName()).thenReturn("REPOSITORY_NAME_ORIGINAL");
     when(forkedRepository.getSlug()).thenReturn("SLUG_ORIG");
 
-    when(slackGlobalSettingsService.getWebHookUrl()).thenReturn("https://hooks.slack.com/globalhook");
+    when(slackGlobalSettingsService.getWebHookUrl()).thenReturn(TestFixtures.SLACK_GLOBAL_HOOK_URL);
     when(slackGlobalSettingsService.getChannelName()).thenReturn("#global_channel");
     when(slackGlobalSettingsService.getIconUrl()).thenReturn("Icon_Url.png");
     when(slackGlobalSettingsService.getIconEmoji()).thenReturn("Icon_Emoji.png");
     when(slackGlobalSettingsService.getNotificationPrLevel()).thenReturn(NotificationLevel.COMPACT);
 
-    when(slackSettings.getSlackWebHookUrl()).thenReturn("https://hooks.slack.com/localhook");
+    when(slackSettings.getSlackWebHookUrl()).thenReturn(TestFixtures.SLACK_LOCAL_HOOK_URL);
     when(slackSettings.getSlackChannelName()).thenReturn("#local_channel");
     when(slackSettings.getSlackIconUrl()).thenReturn("Local_Icon_Url");
     when(slackSettings.getSlackIconEmoji()).thenReturn(":rocket:");
@@ -171,7 +171,7 @@ public class PullRequestActivityListenerTest {
     PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
     listener.NotifySlackChannel(event);
 
-    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.PR_OVERRIDE_SETTINGS_PAYLOAD));
+    verify(slackNotifier).SendSlackNotification(eq(TestFixtures.SLACK_LOCAL_HOOK_URL), eq(TestFixtures.PR_OVERRIDE_SETTINGS_PAYLOAD));
   }
 
   @Test
@@ -185,7 +185,7 @@ public class PullRequestActivityListenerTest {
     PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
     listener.NotifySlackChannel(event);
 
-    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.PR_BUGFIX_CHANNEL_PAYLOAD));
+    verify(slackNotifier).SendSlackNotification(eq(TestFixtures.SLACK_LOCAL_HOOK_URL), eq(TestFixtures.PR_BUGFIX_CHANNEL_PAYLOAD));
   }
 
   @Test
@@ -197,7 +197,7 @@ public class PullRequestActivityListenerTest {
     PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
     listener.NotifySlackChannel(event);
 
-    verify(slackNotifier).SendSlackNotification(eq("https://hooks.slack.com/localhook"), eq(TestFixtures.PR_NO_CHANNEL_PAYLOAD));
+    verify(slackNotifier).SendSlackNotification(eq(TestFixtures.SLACK_LOCAL_HOOK_URL), eq(TestFixtures.PR_NO_CHANNEL_PAYLOAD));
   }
 
 }
