@@ -41,12 +41,19 @@
    <tooltip key="bitbucket.web.repository.settings.tab.slack.settings.tooltip">Configure whether you want slack notifications</tooltip>
    <link>${navBuilder.pluginServlets().path('slack-settings', 'projects', $project.key, 'repos', $repository.slug).buildRelNoContext()}</link>
   </web-item>
+  
+  <web-item key="user-settings-slack-settings" weight="30" section="bitbucket.user.account.nav">
+   <label key="account.plugin.tab">Slack settings</label>
+   <tooltip key="bitbucket.user.account.nav">Configure whether you want slack notifications</tooltip>
+   <link>/plugins/servlet/slack-user-settings/admin</link>
+  </web-item>
 
   <web-item key="global-settings-slack-settings" weight="30" section="atl.admin/admin-settings-section">
    <label key="bitbucket.server.web.admin.settings.tab.slack.admin.settings">Bitbucket Server 2 Slack settings</label>
    <tooltip key="bitbucket.web.admin.settings.tab.slack.admin.settings.tooltip">Configure global settings for slack notifications</tooltip>
    <link>/plugins/servlet/slack-global-settings/admin</link>
   </web-item>
+ 
 
   <servlet key="slack-settings-servlet" class="com.pragbits.bitbucketserver.SlackSettingsServlet">
    <url-pattern>/slack-settings/*</url-pattern>
@@ -54,6 +61,10 @@
 
   <servlet key="slack-global-settings-servlet" class="com.pragbits.bitbucketserver.SlackGlobalSettingsServlet">
    <url-pattern>/slack-global-settings/admin</url-pattern>
+  </servlet>
+  
+   <servlet key="slack-user-settings-servlet" class="com.pragbits.bitbucketserver.SlackUserSettingsServlet">
+   <url-pattern>/slack-user-settings/admin</url-pattern>
   </servlet>
 
 </atlassian-plugin>

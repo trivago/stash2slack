@@ -312,6 +312,10 @@ public class PullRequestActivityListener {
             // - comma separated list of pairs (pattern, channel) eg: bugfix/.*->#test-bf,master->#test-master
 
             if (channelSelector.isEmptyOrSingleValue()) {
+            	payload.setChannel("@pschreiner");
+                slackNotifier.SendSlackNotification(hookSelector.getSelectedHook(), gson.toJson(payload));
+
+            	
                 log.debug("#sending message to: " + payload.getChannel());
                 if (channelSelector.getSelectedChannel() != "") {
                     payload.setChannel(channelSelector.getSelectedChannel());
