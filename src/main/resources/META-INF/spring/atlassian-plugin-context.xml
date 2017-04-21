@@ -9,6 +9,12 @@
         <constructor-arg index="0" ref="pluginSettingsFactory"/>
         <constructor-arg index="1" ref="permissionValidationService"/>
     </bean>
+    
+    <bean id="slackUserSettingsService"
+          class="com.pragbits.bitbucketserver.UserSlackSettingsService">
+        <constructor-arg index="0" ref="pluginSettingsFactory"/>
+        <constructor-arg index="1" ref="permissionValidationService"/>
+    </bean>
 
     <bean id="slackGlobalSettingsService"
           class="com.pragbits.bitbucketserver.DefaultGlobalSlackSettingsService">

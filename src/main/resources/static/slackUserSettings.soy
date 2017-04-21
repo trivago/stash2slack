@@ -1,6 +1,8 @@
 {namespace bitbucketserver.page.slack.user.settings}
 
 /**
+ * @param slackSettings
+ * @param notificationLevels
  **/
 {template .viewUserSlackSettings}
 <html>
@@ -12,9 +14,121 @@
     <body>
         {call widget.aui.pageHeader}
             {param content}
-                <h2>User slack settings/h2>
+                <h2>User slack settings</h2>
             {/param}
         {/call}
+        
+        
+ {call widget.aui.form.form}
+            {param action: '' /}
+            {param content}
+
+                <h4>Pull request notifications</h4>
+
+                {call widget.aui.form.checkbox}
+                    {param id: 'slackNotificationsEnabled' /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.enabled.label') /}
+                    {param checked: $slackSettings.slackNotificationsEnabled /}
+                    {param description: getText('stash2slack.local.settings.slack.enabled.description') /}
+                {/call}
+
+                {call aui.form.selectField}
+                    {param id: 'slackNotificationPrLevel' /}
+                    {param labelContent: getText('stash2slack.local.settings.notification.pr.level.label') /}
+                    {param value: $slackSettings.notificationPrLevel /}
+                    {param options: $notificationLevels /}
+                {/call}
+
+
+                <div style="padding-left: 20px;">
+                    <p>Filter pull request events based on activity types</p>
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsOpenedEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.opened.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsOpenedEnabled /}
+                        {param description: getText('stash2slack.local.settings.slack.opened.enabled.description') /}
+                    {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsReopenedEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.reopened.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsReopenedEnabled /}
+                        {param description: getText('stash2slack.local.settings.settings.slack.reopened.enabled.description') /}
+                    {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsUpdatedEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.updated.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsUpdatedEnabled /}
+                        {param description: getText('stash2slack.local.settings.slack.updated.enabled.description') /}
+                    {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsApprovedEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.approved.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsApprovedEnabled /}
+                        {param description: getText('stash2slack.local.settings.slack.approved.enabled.description') /}
+                    {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsUnapprovedEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.unapproved.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsUnapprovedEnabled /}
+                        {param description: getText('stash2slack.local.settings.slack.unapproved.enabled.description') /}
+                    {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsDeclinedEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.declined.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsDeclinedEnabled /}
+                        {param description: getText('stash2slack.local.settings.slack.declined.enabled.description') /}
+                    {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsMergedEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.merged.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsMergedEnabled /}
+                        {param description: getText('stash2slack.local.settings.slack.merged.enabled.description') /}
+                    {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsCommentedEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.commented.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsCommentedEnabled /}
+                        {param description: getText('stash2slack.local.settings.slack.commented.enabled.description') /}
+                    {/call}
+                </div>
+
+                <h4>Push notifications</h4>
+
+                {call widget.aui.form.checkbox}
+                    {param id: 'slackNotificationsEnabledForPush' /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.push.enabled.label') /}
+                    {param checked: $slackSettings.slackNotificationsEnabledForPush /}
+                    {param description: getText('stash2slack.local.settings.slack.push.enabled.description') /}
+                {/call}
+                {call aui.form.selectField}
+                    {param id: 'slackNotificationLevel' /}
+                    {param labelContent: getText('stash2slack.local.settings.notification.level.label') /}
+                    {param value: $slackSettings.notificationLevel /}
+                    {param options: $notificationLevels /}
+                {/call}
+
+                <h4>Personal notifications</h4>
+
+                {call widget.aui.form.checkbox}
+                    {param id: 'slackNotificationsEnabledForPersonal' /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.personal.enabled.label') /}
+                    {param checked: $slackSettings.slackNotificationsEnabledForPersonal /}
+                    {param description: getText('stash2slack.local.settings.slack.personal.enabled.description') /}
+                {/call}
+
+
+                {call aui.form.buttons}
+                    {param content}
+                        {call aui.form.submit}
+                            {param id: 'bitbucketserver.web.slack.settings.submit' /}
+                            {param text: getText('stash2slack.local.settings.submit') /}
+                            {param type: 'submit' /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/param}
+        {/call}
+        
     </body>
 </html>
 {/template}
