@@ -65,7 +65,7 @@ public class SlackUserSettingsServlet extends HttpServlet {
           slackSettingsService.setSlackSettings(
                   user,
                   new ImmutableSlackSettings(
-                          "on".equals(req.getParameter("slackNotificationsOverrideEnabled")),
+                          true,
                           "on".equals(req.getParameter("slackNotificationsEnabled")),
                           "on".equals(req.getParameter("slackNotificationsOpenedEnabled")),
                           "on".equals(req.getParameter("slackNotificationsReopenedEnabled")),
@@ -79,11 +79,11 @@ public class SlackUserSettingsServlet extends HttpServlet {
                           "on".equals(req.getParameter("slackNotificationsEnabledForPersonal")),
                           notificationLevel,
                           notificationPrLevel,
-                          req.getParameter("slackChannelName"),
-                          req.getParameter("slackWebHookUrl").trim(),
-                          req.getParameter("slackUsername").trim(),
-                          req.getParameter("slackIconUrl").trim(),
-                          req.getParameter("slackIconEmoji").trim()
+                          "",
+                          "",
+                          "",
+                          "",
+                          ""
                   )
           );
 

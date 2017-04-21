@@ -8,6 +8,7 @@ import com.atlassian.bitbucket.event.pull.PullRequestRescopeActivityEvent;
 import com.atlassian.bitbucket.nav.NavBuilder;
 import com.atlassian.bitbucket.pull.PullRequestParticipant;
 import com.atlassian.bitbucket.repository.Repository;
+import com.atlassian.bitbucket.user.ApplicationUser;
 import com.atlassian.bitbucket.avatar.AvatarService;
 import com.atlassian.bitbucket.avatar.AvatarRequest;
 import com.google.gson.Gson;
@@ -26,6 +27,7 @@ public class PullRequestActivityListener {
 
     private final SlackGlobalSettingsService slackGlobalSettingsService;
     private final SlackSettingsService slackSettingsService;
+    private final SlackUserSettingsService slackUserSettingsService;
     private final NavBuilder navBuilder;
     private final SlackNotifier slackNotifier;
     private final AvatarService avatarService;
@@ -34,15 +36,244 @@ public class PullRequestActivityListener {
 
     public PullRequestActivityListener(SlackGlobalSettingsService slackGlobalSettingsService,
                                              SlackSettingsService slackSettingsService,
+                                             SlackUserSettingsService slackUserSettingsService,                                           
                                              NavBuilder navBuilder,
                                              SlackNotifier slackNotifier,
                                              AvatarService avatarService) {
         this.slackGlobalSettingsService = slackGlobalSettingsService;
         this.slackSettingsService = slackSettingsService;
+        this.slackUserSettingsService = slackUserSettingsService;      
         this.navBuilder = navBuilder;
         this.slackNotifier = slackNotifier;
         this.avatarService = avatarService;
     }
+    
+    @EventListener
+	public void NotifySlackUsers(PullRequestActivityEvent event) {
+    	System.out.println("NotifySlackUsers" + event);
+
+		Repository repository = event.getPullRequest().getToRef().getRepository();
+		// find out if notification is enabled for this user
+		for (PullRequestParticipant reviewer : event.getPullRequest().getReviewers()) {
+			ApplicationUser user = reviewer.getUser();
+			
+			System.out.println("User: " + user);
+
+			SlackSettings slackSettings = slackUserSettingsService.getSlackSettings(user);
+
+			String globalHookUrl = slackGlobalSettingsService.getWebHookUrl();
+
+			SettingsSelector settingsSelector = new SettingsSelector(slackSettings, slackGlobalSettingsService);
+			SlackSettings resolvedSlackSettings = settingsSelector.getResolvedSlackSettings();
+
+			if (resolvedSlackSettings.isSlackNotificationsEnabled()) {
+				System.out.println("Notifications enabled for user " + user.getSlug());
+
+				String repoName = repository.getSlug();
+				String projectName = repository.getProject().getKey();
+				long pullRequestId = event.getPullRequest().getId();
+				String userName = event.getUser() != null ? event.getUser().getDisplayName() : "unknown user";
+				String activity = event.getActivity().getAction().name();
+				String avatar = event.getUser() != null ? avatarService.getUrlForPerson(event.getUser(), avatarRequest)
+						: "";
+
+				NotificationLevel resolvedLevel = resolvedSlackSettings.getNotificationPrLevel();
+
+				// Ignore RESCOPED PR events
+				if (activity.equalsIgnoreCase("RESCOPED") && event instanceof PullRequestRescopeActivityEvent) {
+					return;
+				}
+
+				if (activity.equalsIgnoreCase("OPENED") && !resolvedSlackSettings.isSlackNotificationsOpenedEnabled()) {
+					return;
+				}
+
+				if (activity.equalsIgnoreCase("REOPENED")
+						&& !resolvedSlackSettings.isSlackNotificationsReopenedEnabled()) {
+					return;
+				}
+
+				if (activity.equalsIgnoreCase("UPDATED")
+						&& !resolvedSlackSettings.isSlackNotificationsUpdatedEnabled()) {
+					return;
+				}
+
+				if (activity.equalsIgnoreCase("APPROVED")
+						&& !resolvedSlackSettings.isSlackNotificationsApprovedEnabled()) {
+					return;
+				}
+
+				if (activity.equalsIgnoreCase("UNAPPROVED")
+						&& !resolvedSlackSettings.isSlackNotificationsUnapprovedEnabled()) {
+					return;
+				}
+
+				if (activity.equalsIgnoreCase("DECLINED")
+						&& !resolvedSlackSettings.isSlackNotificationsDeclinedEnabled()) {
+					return;
+				}
+
+				if (activity.equalsIgnoreCase("MERGED") && !resolvedSlackSettings.isSlackNotificationsMergedEnabled()) {
+					return;
+				}
+
+				if (activity.equalsIgnoreCase("COMMENTED")
+						&& !resolvedSlackSettings.isSlackNotificationsCommentedEnabled()) {
+					return;
+				}
+
+				NavBuilder.PullRequest pullRequestUrlBuilder = navBuilder.project(projectName).repo(repoName)
+						.pullRequest(pullRequestId);
+
+				String url = pullRequestUrlBuilder.overview().buildAbsolute();
+
+				SlackPayload payload = new SlackPayload();
+				payload.setMrkdwn(true);
+				payload.setLinkNames(true);
+				payload.setUsername(resolvedSlackSettings.getSlackUsername());
+				payload.setIconUrl(resolvedSlackSettings.getSlackIconUrl());
+				payload.setIconEmoji(resolvedSlackSettings.getSlackIconEmoji());
+
+				SlackAttachment attachment = new SlackAttachment();
+				attachment.setAuthorName(userName);
+				attachment.setAuthorIcon(avatar);
+
+				switch (event.getActivity().getAction()) {
+				case OPENED:
+					attachment.setColor(ColorCode.BLUE.getCode());
+					attachment.setFallback(String.format("%s opened pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), url));
+					attachment.setText(String.format("opened pull request <%s|#%d: %s>", url,
+							event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+
+					if (resolvedLevel == NotificationLevel.COMPACT) {
+						this.addField(attachment, "Description", event.getPullRequest().getDescription());
+					}
+
+					if (resolvedLevel == NotificationLevel.VERBOSE) {
+						this.addReviewers(attachment, event.getPullRequest().getReviewers());
+					}
+					break;
+
+				case REOPENED:
+					attachment.setColor(ColorCode.BLUE.getCode());
+					attachment.setFallback(String.format("%s reopened pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), url));
+					attachment.setText(String.format("reopened pull request <%s|#%d: %s>", url,
+							event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+
+					if (resolvedLevel == NotificationLevel.COMPACT) {
+						this.addField(attachment, "Description", event.getPullRequest().getDescription());
+					}
+					if (resolvedLevel == NotificationLevel.VERBOSE) {
+						this.addReviewers(attachment, event.getPullRequest().getReviewers());
+					}
+					break;
+
+				case UPDATED:
+					attachment.setColor(ColorCode.PURPLE.getCode());
+					attachment.setFallback(String.format("%s updated pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), url));
+					attachment.setText(String.format("updated pull request <%s|#%d: %s>", url,
+							event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+
+					if (resolvedLevel == NotificationLevel.COMPACT) {
+						this.addField(attachment, "Description", event.getPullRequest().getDescription());
+					}
+					if (resolvedLevel == NotificationLevel.VERBOSE) {
+						this.addReviewers(attachment, event.getPullRequest().getReviewers());
+					}
+					break;
+
+				case APPROVED:
+					attachment.setColor(ColorCode.GREEN.getCode());
+					attachment.setFallback(String.format("%s approved pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), url));
+					attachment.setText(String.format("approved pull request <%s|#%d: %s>", url,
+							event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+					break;
+
+				case UNAPPROVED:
+					attachment.setColor(ColorCode.RED.getCode());
+					attachment.setFallback(String.format("%s unapproved pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), url));
+					attachment.setText(String.format("unapproved pull request <%s|#%d: %s>", url,
+							event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+					break;
+
+				case DECLINED:
+					attachment.setColor(ColorCode.DARK_RED.getCode());
+					attachment.setFallback(String.format("%s declined pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), url));
+					attachment.setText(String.format("declined pull request <%s|#%d: %s>", url,
+							event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+					break;
+
+				case MERGED:
+					attachment.setColor(ColorCode.DARK_GREEN.getCode());
+					attachment.setFallback(String.format("%s merged pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), url));
+					attachment.setText(String.format("merged pull request <%s|#%d: %s>", url,
+							event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+					break;
+
+				case RESCOPED:
+					attachment.setColor(ColorCode.PURPLE.getCode());
+					attachment.setFallback(String.format("%s rescoped on pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), url));
+					attachment.setText(String.format("rescoped on pull request <%s|#%d: %s>", url,
+							event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+					break;
+
+				case COMMENTED:
+					Comment comment = ((PullRequestCommentActivityEvent) event).getActivity().getComment();
+					String commentUrl = pullRequestUrlBuilder.comment(comment.getId()).buildAbsolute();
+
+					attachment.setColor(ColorCode.PALE_BLUE.getCode());
+					attachment.setFallback(String.format("%s commented on pull request \"%s\". <%s|(open)>", userName,
+							event.getPullRequest().getTitle(), commentUrl));
+					if (resolvedLevel == NotificationLevel.MINIMAL) {
+						attachment.setText(String.format("commented on pull request <%s|#%d: %s>", commentUrl,
+								event.getPullRequest().getId(), event.getPullRequest().getTitle()));
+					}
+					if (resolvedLevel == NotificationLevel.COMPACT || resolvedLevel == NotificationLevel.VERBOSE) {
+						attachment.setText(String.format("commented on pull request <%s|#%d: %s>\n%s", commentUrl,
+								event.getPullRequest().getId(), event.getPullRequest().getTitle(),
+								((PullRequestCommentActivityEvent) event).getActivity().getComment().getText()));
+					}
+					break;
+				}
+
+				if (resolvedLevel == NotificationLevel.VERBOSE) {
+					SlackAttachmentField projectField = new SlackAttachmentField();
+					projectField.setTitle("Source");
+					projectField.setValue(String.format("_%s — %s_\n`%s`",
+							event.getPullRequest().getFromRef().getRepository().getProject().getName(),
+							event.getPullRequest().getFromRef().getRepository().getName(),
+							event.getPullRequest().getFromRef().getDisplayId()));
+					projectField.setShort(true);
+					attachment.addField(projectField);
+
+					SlackAttachmentField repoField = new SlackAttachmentField();
+					repoField.setTitle("Destination");
+					repoField.setValue(String.format("_%s — %s_\n`%s`",
+							event.getPullRequest().getToRef().getRepository().getProject().getName(),
+							event.getPullRequest().getToRef().getRepository().getName(),
+							event.getPullRequest().getToRef().getDisplayId()));
+					repoField.setShort(true);
+					attachment.addField(repoField);
+				}
+
+				payload.addAttachment(attachment);
+
+				payload.setChannel("@" + user.getSlug());
+				slackNotifier.SendSlackNotification(globalHookUrl, gson.toJson(payload));
+
+			}
+		}
+
+	}
+
 
     @EventListener
     public void NotifySlackChannel(PullRequestActivityEvent event) {
@@ -311,11 +542,7 @@ public class PullRequestActivityListener {
             // - single channel value
             // - comma separated list of pairs (pattern, channel) eg: bugfix/.*->#test-bf,master->#test-master
 
-            if (channelSelector.isEmptyOrSingleValue()) {
-            	payload.setChannel("@pschreiner");
-                slackNotifier.SendSlackNotification(hookSelector.getSelectedHook(), gson.toJson(payload));
-
-            	
+            if (channelSelector.isEmptyOrSingleValue()) {          	
                 log.debug("#sending message to: " + payload.getChannel());
                 if (channelSelector.getSelectedChannel() != "") {
                     payload.setChannel(channelSelector.getSelectedChannel());
