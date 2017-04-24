@@ -53,6 +53,9 @@ public class SettingsSelector {
         );
     }
     
+    /*
+     * For the user, we always use the global Slack settings
+     */
     private void setResolvedSlackSettingsUser() {
         resolvedSlackSettings = new ImmutableSlackSettings(
                 slackSettings.isSlackNotificationsOverrideEnabled(),

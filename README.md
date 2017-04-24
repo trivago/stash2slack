@@ -1,5 +1,13 @@
 # Stash2Slack (for Bitbucket Server)
 
+## Trivago notes
+
+This fork adds support for User based notifications. Each user can enable notifications 
+at his Account Config page, and will receive personal messages in Slack everyt time a
+matching event is triggered.
+
+## Original Readme
+
 Plugin subscribes to Bitbucket Server events and send notifications to
 Slack channels.
 
