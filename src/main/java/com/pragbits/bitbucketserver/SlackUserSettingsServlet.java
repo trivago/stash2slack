@@ -81,7 +81,7 @@ public class SlackUserSettingsServlet extends HttpServlet {
                           notificationPrLevel,
                           "",
                           "",
-                          "",
+                          req.getParameter("slackUsername"),
                           "",
                           ""
                   )

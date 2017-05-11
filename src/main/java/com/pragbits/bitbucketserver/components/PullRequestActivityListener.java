@@ -18,8 +18,6 @@ import com.pragbits.bitbucketserver.tools.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,16 +55,10 @@ public class PullRequestActivityListener {
 
 	public void notifySlackUsers(PullRequestActivityEvent event) {
 		Repository repository = event.getPullRequest().getToRef().getRepository();
-		ApplicationUser originator = event.getActivity().getUser();
 		
 		// find out if notification is enabled for this user
 		for (Watcher watcher : event.getPullRequest().getWatchers()) {
 			ApplicationUser user = watcher.getUser();
-			
-			// don't send notifications to originator of event
-			if(originator.equals(user)) {
-				return;
-			}
 			
 			SlackSettings slackSettings = slackUserSettingsService.getSlackSettings(user);
 
@@ -74,13 +66,17 @@ public class PullRequestActivityListener {
 
 			SettingsSelector settingsSelector = new SettingsSelector(slackSettings, slackGlobalSettingsService);
 			SlackSettings resolvedSlackSettings = settingsSelector.getResolvedSlackSettings();
-
-			if (resolvedSlackSettings.isSlackNotificationsEnabled() && shouldNotify(event, resolvedSlackSettings)) {
+			
+			if (resolvedSlackSettings.isSlackNotificationsEnabled() && shouldNotify(event, user, resolvedSlackSettings)) {
 				SlackPayload payload = getSlackPayload(event, repository, resolvedSlackSettings);
+				
+				String username = resolvedSlackSettings.getSlackUsername();
+				if(username.equals("")) {
+					username = user.getSlug();
+				}
 
-				payload.setChannel("@" + user.getSlug());
+				payload.setChannel("@" + username);
 				slackNotifier.SendSlackNotification(globalHookUrl, gson.toJson(payload));
-
 			}
 		}
 
@@ -365,9 +361,20 @@ public class PullRequestActivityListener {
         this.addField(attachment, "Reviewers", names);
     }
     
+	private boolean shouldNotify(PullRequestActivityEvent event, ApplicationUser user, SlackSettings resolvedSlackSettings) {			
+		if(user != null) {
+			ApplicationUser originator = event.getActivity().getUser();
+
+			if(originator.equals(user)) {
+				return false;
+			}
+		}
+
+		return shouldNotify(event, resolvedSlackSettings);
+	}
+	
 	private boolean shouldNotify(PullRequestActivityEvent event, SlackSettings resolvedSlackSettings) {		
 		String activity = event.getActivity().getAction().name();
-
 		
 		// Ignore RESCOPED PR events
 		if (activity.equalsIgnoreCase("RESCOPED") && event instanceof PullRequestRescopeActivityEvent) {
@@ -413,5 +420,6 @@ public class PullRequestActivityListener {
 		}
 		return true;
 	}
+
 
 }

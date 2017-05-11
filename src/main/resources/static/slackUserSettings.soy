@@ -92,20 +92,15 @@
                     {/call}
                 </div>
 
-                <h4>Push notifications</h4>
 
-                {call widget.aui.form.checkbox}
-                    {param id: 'slackNotificationsEnabledForPush' /}
-                    {param labelContent: getText('stash2slack.local.settings.slack.push.enabled.label') /}
-                    {param checked: $slackSettings.slackNotificationsEnabledForPush /}
-                    {param description: getText('stash2slack.local.settings.slack.push.enabled.description') /}
+                <h4>Additional configuration</h4>
+                {call widget.aui.form.text}
+                    {param id: 'slackUsername' /}
+                    {param labelContent: getText('stash2slack.local.settings.slack.username') /}
+                    {param initialValue: $slackSettings.slackUsername /}
+                    {param description: 'Override slack username (by default uses you bitbucket username)' /}
                 {/call}
-                {call aui.form.selectField}
-                    {param id: 'slackNotificationLevel' /}
-                    {param labelContent: getText('stash2slack.local.settings.notification.level.label') /}
-                    {param value: $slackSettings.notificationLevel /}
-                    {param options: $notificationLevels /}
-                {/call}
+
 
                 <h4>Personal notifications</h4>
 

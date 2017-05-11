@@ -74,7 +74,7 @@ public class SettingsSelector {
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getNotificationPrLevel() : slackGlobalSettingsService.getNotificationPrLevel(),
                 slackGlobalSettingsService.getChannelName(),
                 slackGlobalSettingsService.getWebHookUrl(),
-                slackGlobalSettingsService.getUsername(),
+                slackSettings.getSlackUsername(),
                 slackGlobalSettingsService.getIconUrl(),
                 slackGlobalSettingsService.getIconEmoji()
         );
