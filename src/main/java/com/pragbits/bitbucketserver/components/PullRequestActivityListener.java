@@ -9,6 +9,7 @@ import com.atlassian.bitbucket.nav.NavBuilder;
 import com.atlassian.bitbucket.pull.PullRequestParticipant;
 import com.atlassian.bitbucket.repository.Repository;
 import com.atlassian.bitbucket.user.ApplicationUser;
+import com.atlassian.bitbucket.watcher.Watcher;
 import com.atlassian.bitbucket.avatar.AvatarService;
 import com.atlassian.bitbucket.avatar.AvatarRequest;
 import com.google.gson.Gson;
@@ -56,9 +57,16 @@ public class PullRequestActivityListener {
 
 	public void notifySlackUsers(PullRequestActivityEvent event) {
 		Repository repository = event.getPullRequest().getToRef().getRepository();
+		ApplicationUser originator = event.getActivity().getUser();
+		
 		// find out if notification is enabled for this user
-		for (PullRequestParticipant reviewer : event.getPullRequest().getReviewers()) {
-			ApplicationUser user = reviewer.getUser();
+		for (Watcher watcher : event.getPullRequest().getWatchers()) {
+			ApplicationUser user = watcher.getUser();
+			
+			// don't send notifications to originator of event
+			if(originator.equals(user)) {
+				return;
+			}
 			
 			SlackSettings slackSettings = slackUserSettingsService.getSlackSettings(user);
 
