@@ -236,7 +236,7 @@ public class RepositoryPushActivityListener {
             attachment.setColor(ColorCode.GRAY.getCode());
             SlackAttachmentField field = new SlackAttachmentField();
 
-            attachment.setTitle(String.format("[%s:%s] - %s", event.getRepository().getName(), refChange.getRefId().replace("refs/heads", ""), c.getId()));
+            attachment.setTitle(String.format("[%s:%s] - %s", event.getRepository().getName(), refChange.getRef().getId().replace("refs/heads", ""), c.getId()));
             attachment.setTitle_link(urlBuilder.commit(c.getId()).buildAbsolute());
 
             field.setTitle("comment");
