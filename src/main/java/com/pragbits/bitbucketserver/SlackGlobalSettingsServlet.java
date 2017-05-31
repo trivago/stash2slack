@@ -79,6 +79,7 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
 
         slackGlobalSettingsService.setSlackNotificationsEnabledForPush(bool(req, "slackNotificationsEnabledForPush"));
         slackGlobalSettingsService.setSlackNotificationsEnabledForPersonal(bool(req, "slackNotificationsEnabledForPersonal"));
+        slackGlobalSettingsService.setSlackNotificationsNeedsWorkEnabled(bool(req, "slackNotificationsNeedsWorkEnabled"));
 
         doGet(req, res);
     }
@@ -111,6 +112,7 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
         Boolean slackNotificationsCommentedEnabled = slackGlobalSettingsService.getSlackNotificationsCommentedEnabled();
         Boolean slackNotificationsEnabledForPush = slackGlobalSettingsService.getSlackNotificationsEnabledForPush();
         Boolean slackNotificationsEnabledForPersonal = slackGlobalSettingsService.getSlackNotificationsEnabledForPersonal();
+        Boolean slackNotificationsNeedsWorkEnabled = slackGlobalSettingsService.getSlackNotificationsNeedsWorkEnabled();
         String notificationLevel = slackGlobalSettingsService.getNotificationLevel().toString();
         String notificationPrLevel = slackGlobalSettingsService.getNotificationPrLevel().toString();
 
@@ -130,6 +132,7 @@ public class SlackGlobalSettingsServlet extends HttpServlet {
                         .put("slackNotificationsCommentedEnabled", slackNotificationsCommentedEnabled)
                         .put("slackNotificationsEnabledForPush", slackNotificationsEnabledForPush)
                         .put("slackNotificationsEnabledForPersonal", slackNotificationsEnabledForPersonal)
+                        .put("slackNotificationsNeedsWorkEnabled", slackNotificationsNeedsWorkEnabled)
                         .put("notificationLevel", notificationLevel)
                         .put("notificationPrLevel", notificationPrLevel)
                         .put("notificationLevels", new SelectFieldOptions(NotificationLevel.values()).toSoyStructure())
