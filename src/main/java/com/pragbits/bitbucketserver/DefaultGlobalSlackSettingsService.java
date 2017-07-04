@@ -21,6 +21,7 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
     private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PR_LEVEL = "stash2slack.globalsettings.slacknotificationsprlevel";
     private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PUSH_ENABLED = "stash2slack.globalsettings.slacknotificationspushenabled";
     private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED = "stash2slack.globalsettings.slacknotificationspersonalenabled";
+    private static final String KEY_GLOBAL_SETTING_NOTIFICATIONS_NEEDS_WORK_ENABLED = "stash2slack.globalsettings.slacknotificationsneedsworkenabled";
     private static final String KEY_GLOBAL_SETTING_USER_NAME = "stash2slack.globalsettings.username";
     private static final String KEY_GLOBAL_SETTING_ICON_URL = "stash2slack.globalsettings.iconurl";
     private static final String KEY_GLOBAL_SETTING_ICON_EMOJI = "stash2slack.globalsettings.iconemojil";
@@ -167,6 +168,16 @@ public class DefaultGlobalSlackSettingsService implements SlackGlobalSettingsSer
     @Override
     public void setSlackNotificationsEnabledForPersonal(boolean value) {
         setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_PERSONAL_ENABLED, value);
+    }
+
+    @Override
+    public boolean getSlackNotificationsNeedsWorkEnabled() {
+        return getBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_NEEDS_WORK_ENABLED);
+    }
+
+    @Override
+    public void setSlackNotificationsNeedsWorkEnabled(boolean value) {
+        setBoolean(KEY_GLOBAL_SETTING_NOTIFICATIONS_NEEDS_WORK_ENABLED, value);
     }
 
     @Override

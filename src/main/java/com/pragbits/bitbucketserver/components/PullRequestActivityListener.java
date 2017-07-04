@@ -97,6 +97,9 @@ public class PullRequestActivityListener {
             WebHookSelector hookSelector = new WebHookSelector(globalHookUrl, localHookUrl);
             ChannelSelector channelSelector = new ChannelSelector(slackGlobalSettingsService.getChannelName(), slackSettings.getSlackChannelName());
 
+            log.debug("SelectedHook: " + hookSelector.getSelectedHook());
+            log.debug("SelectedChannel: " + channelSelector.getSelectedChannel());
+
             if (!hookSelector.isHookValid()) {
                 log.error("There is no valid configured Web hook url! Reason: " + hookSelector.getProblem());
                 return;
@@ -114,6 +117,7 @@ public class PullRequestActivityListener {
 
             SlackPayload payload = getSlackPayload(event, repository, resolvedSlackSettings);
 
+
             // slackSettings.getSlackChannelName might be:
             // - empty
             // - single channel value
@@ -121,7 +125,7 @@ public class PullRequestActivityListener {
 
             if (channelSelector.isEmptyOrSingleValue()) {          	
                 log.debug("#sending message to: " + payload.getChannel());
-                if (channelSelector.getSelectedChannel() != "") {
+                if (!channelSelector.getSelectedChannel().isEmpty()) {
                     payload.setChannel(channelSelector.getSelectedChannel());
                 }
                 slackNotifier.SendSlackNotification(hookSelector.getSelectedHook(), gson.toJson(payload));
@@ -316,6 +320,18 @@ public class PullRequestActivityListener {
 		                    ((PullRequestCommentActivityEvent) event).getActivity().getComment().getText()));
 		        }
 		        break;
+		        
+		    case REVIEWED:
+		    	    attachment.setColor(ColorCode.ORANGE.getCode());
+                attachment.setFallback(String.format("%s reviewed pull request \"%s\". <%s|(open)>",
+                  userName,
+                  event.getPullRequest().getTitle(),
+                  url));
+                attachment.setText(String.format("reviewed pull request <%s|#%d: %s>",
+                  url,
+                  event.getPullRequest().getId(),
+                  event.getPullRequest().getTitle()));
+                break;
 		}
 
 		if (resolvedLevel == NotificationLevel.VERBOSE) {
@@ -418,6 +434,9 @@ public class PullRequestActivityListener {
 				&& !resolvedSlackSettings.isSlackNotificationsCommentedEnabled()) {
 			return false;
 		}
+		if (activity.equalsIgnoreCase("REVIEWED") && !resolvedSlackSettings.isSlackNotificationsNeedsWorkEnabled()) {
+            return false;
+        }
 		return true;
 	}
 
