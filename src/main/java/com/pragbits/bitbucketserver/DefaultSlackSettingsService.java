@@ -33,6 +33,7 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
             true,   // commented
             false,  // push enabled
             false,  // personal (forks) enabled
+            false,  // needs work
             NotificationLevel.VERBOSE,
             NotificationLevel.VERBOSE,
             "",         // channel name override
@@ -54,6 +55,7 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
     static final String KEY_SLACK_COMMENTED_NOTIFICATION = "slackNotificationsCommentedEnabled";
     static final String KEY_SLACK_NOTIFICATION_PUSH = "slackNotificationsEnabledForPush";
     static final String KEY_SLACK_NOTIFICATION_PERSONAL = "slackNotificationsEnabledForPersonal";
+    static final String KEY_SLACK_NOTIFICATION_NEEDS_WORK = "slackNotificationsNeedsWorkEnabled";
     static final String KEY_SLACK_NOTIFICATION_LEVEL = "slackNotificationLevel";
     static final String KEY_SLACK_NOTIFICATION_PR_LEVEL = "slackNotificationPrLevel";
     static final String KEY_SLACK_CHANNEL_NAME = "slackChannelName";
@@ -121,6 +123,7 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
                 .put(KEY_SLACK_COMMENTED_NOTIFICATION, Boolean.toString(settings.isSlackNotificationsCommentedEnabled()))
                 .put(KEY_SLACK_NOTIFICATION_PUSH, Boolean.toString(settings.isSlackNotificationsEnabledForPush()))
                 .put(KEY_SLACK_NOTIFICATION_PERSONAL, Boolean.toString(settings.isSlackNotificationsEnabledForPersonal()))
+                .put(KEY_SLACK_NOTIFICATION_NEEDS_WORK, Boolean.toString(settings.isSlackNotificationsNeedsWorkEnabled()))
                 .put(KEY_SLACK_NOTIFICATION_LEVEL, settings.getNotificationLevel().toString())
                 .put(KEY_SLACK_NOTIFICATION_PR_LEVEL, settings.getNotificationPrLevel().toString())
                 .put(KEY_SLACK_CHANNEL_NAME, settings.getSlackChannelName().isEmpty() ? " " : settings.getSlackChannelName())
@@ -149,6 +152,7 @@ public class DefaultSlackSettingsService implements SlackSettingsService {
                 Boolean.parseBoolean(settings.get(KEY_SLACK_COMMENTED_NOTIFICATION)),
                 Boolean.parseBoolean(settings.get(KEY_SLACK_NOTIFICATION_PUSH)),
                 Boolean.parseBoolean(settings.get(KEY_SLACK_NOTIFICATION_PERSONAL)),
+                Boolean.parseBoolean(settings.get(KEY_SLACK_NOTIFICATION_NEEDS_WORK)),
                 settings.containsKey(KEY_SLACK_NOTIFICATION_LEVEL) ? NotificationLevel.valueOf(settings.get(KEY_SLACK_NOTIFICATION_LEVEL)) : NotificationLevel.VERBOSE,
                 settings.containsKey(KEY_SLACK_NOTIFICATION_PR_LEVEL) ? NotificationLevel.valueOf(settings.get(KEY_SLACK_NOTIFICATION_PR_LEVEL)) : NotificationLevel.VERBOSE,
                 Objects.toString(settings.get(KEY_SLACK_CHANNEL_NAME), " ").equals(" ") ? "" : settings.get(KEY_SLACK_CHANNEL_NAME),

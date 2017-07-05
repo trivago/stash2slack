@@ -15,7 +15,6 @@ public class ChannelSelector {
         this.globalChannel = globalChannel;
         this.localChannel = localChannel;
         this.selectedChannel = "";
-
         setChannel();
     }
 

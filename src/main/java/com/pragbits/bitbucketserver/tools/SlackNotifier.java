@@ -32,6 +32,8 @@ public class SlackNotifier {
             HttpPost httpPost = new HttpPost(targetUrl);
             //httpPost.setConfig(requestConfig);
 
+            log.debug("SlackNotifier targetUrl: " + targetUrl + ", jsonString" + jsonString);
+
             httpPost.setEntity(new StringEntity(jsonString, ContentType.APPLICATION_JSON));
             CloseableHttpResponse response = httpClient.execute(httpPost);
             try {
@@ -39,6 +41,8 @@ public class SlackNotifier {
                     HttpEntity entity = response.getEntity();
                     String responseString = EntityUtils.toString(entity, "UTF-8");
                     log.error("#error during httpPost in SlackNotifier: " + responseString);
+                    log.error("\tstatus code: " + response.getStatusLine().getStatusCode());
+                    log.error("\tstatus reason: " + response.getStatusLine().getReasonPhrase());
                     log.error("\tpayload string: " + jsonString);
                 }
             } finally {

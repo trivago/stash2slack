@@ -81,6 +81,7 @@ public class SlackSettingsServlet extends HttpServlet {
                         "on".equals(req.getParameter("slackNotificationsCommentedEnabled")),
                         "on".equals(req.getParameter("slackNotificationsEnabledForPush")),
                         "on".equals(req.getParameter("slackNotificationsEnabledForPersonal")),
+                        "on".equals(req.getParameter("slackNotificationsNeedsWorkEnabled")),
                         notificationLevel,
                         notificationPrLevel,
                         req.getParameter("slackChannelName"),

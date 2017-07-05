@@ -98,6 +98,12 @@
                         {param checked: $slackSettings.slackNotificationsCommentedEnabled /}
                         {param description: getText('stash2slack.local.settings.slack.commented.enabled.description') /}
                     {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsNeedsWorkEnabled' /}
+                        {param labelContent: getText('stash2slack.local.settings.slack.needs.work.enabled.label') /}
+                        {param checked: $slackSettings.slackNotificationsNeedsWorkEnabled /}
+                        {param description: getText('stash2slack.local.settings.slack.needs.work.enabled.description') /}
+                    {/call}
                 </div>
 
                 <h4>Push notifications</h4>
