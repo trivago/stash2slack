@@ -71,6 +71,7 @@ public class SettingsSelector {
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.isSlackNotificationsCommentedEnabled() : slackGlobalSettingsService.getSlackNotificationsCommentedEnabled(),
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.isSlackNotificationsEnabledForPush() : slackGlobalSettingsService.getSlackNotificationsEnabledForPush(),
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.isSlackNotificationsEnabledForPersonal() : slackGlobalSettingsService.getSlackNotificationsEnabledForPersonal(),
+                slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.isSlackNotificationsNeedsWorkEnabled() : slackGlobalSettingsService.getSlackNotificationsNeedsWorkEnabled(),
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getNotificationLevel() : slackGlobalSettingsService.getNotificationLevel(),
                 slackSettings.isSlackNotificationsOverrideEnabled() ? slackSettings.getNotificationPrLevel() : slackGlobalSettingsService.getNotificationPrLevel(),
                 slackGlobalSettingsService.getChannelName(),
