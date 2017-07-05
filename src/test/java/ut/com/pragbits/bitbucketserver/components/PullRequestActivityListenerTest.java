@@ -13,6 +13,7 @@ import com.pragbits.bitbucketserver.SlackSettings;
 import com.pragbits.bitbucketserver.SlackSettingsService;
 import com.pragbits.bitbucketserver.components.PullRequestActivityListener;
 import com.pragbits.bitbucketserver.tools.SlackNotifier;
+import com.pragbits.bitbucketserver.SlackUserSettingsService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.*;
 
 public class PullRequestActivityListenerTest {
   @Mock private SlackGlobalSettingsService slackGlobalSettingsService;
+  @Mock private SlackUserSettingsService slackUserSettingService;
   @Mock private SlackSettingsService slackSettingsService;
   @Mock private SlackSettings slackSettings;
   @Mock private NavBuilder navBuilder;
@@ -37,6 +39,8 @@ public class PullRequestActivityListenerTest {
   @Mock private SlackNotifier slackNotifier;
   @Mock private AvatarService avatarService;
   @Mock private PullRequestActivity pullRequestActivity;
+  @Mock private PullRequestActivityEvent pullRequestActivityEvent;
+  @Mock private PullRequestActivityListener pullRequestActivityListener;
   @Mock private PullRequest pullRequest;
   @Mock private PullRequestParticipant pullRequestParticipant1;
   @Mock private PullRequestParticipant pullRequestParticipant2;
@@ -129,8 +133,8 @@ public class PullRequestActivityListenerTest {
   public void notifySlackChannelNotInvokedWhenDisabled() throws Exception {
     when(slackSettings.isSlackNotificationsEnabled()).thenReturn(false);
 
-    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
-    listener.NotifySlackChannel(event);
+    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, slackUserSettingService ,navBuilder, slackNotifier, avatarService);
+    listener.notifySlackChannel(event);
 
     verify(slackNotifier, never()).SendSlackNotification(any(), any());
   }
@@ -142,8 +146,8 @@ public class PullRequestActivityListenerTest {
     when(slackSettings.getSlackWebHookUrl()).thenReturn("");
     when(slackGlobalSettingsService.getWebHookUrl()).thenReturn("");
 
-    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
-    listener.NotifySlackChannel(event);
+    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, slackUserSettingService,  navBuilder, slackNotifier, avatarService);
+    listener.notifySlackChannel(event);
 
     verify(slackNotifier, never()).SendSlackNotification(any(), any());
   }
@@ -156,8 +160,8 @@ public class PullRequestActivityListenerTest {
     when(slackSettings.isSlackNotificationsEnabledForPersonal()).thenReturn(false);
     when(slackGlobalSettingsService.getSlackNotificationsEnabledForPersonal()).thenReturn(false);
 
-    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
-    listener.NotifySlackChannel(event);
+    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, slackUserSettingService, navBuilder, slackNotifier, avatarService);
+    listener.notifySlackChannel(event);
 
     verify(slackNotifier, never()).SendSlackNotification(any(), any());
   }
@@ -168,8 +172,8 @@ public class PullRequestActivityListenerTest {
     when(slackSettings.isSlackNotificationsOverrideEnabled()).thenReturn(true);
     when(slackSettings.isSlackNotificationsOpenedEnabled()).thenReturn(true);
 
-    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
-    listener.NotifySlackChannel(event);
+    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, slackUserSettingService, navBuilder, slackNotifier, avatarService);
+    listener.notifySlackChannel(event);
 
     verify(slackNotifier).SendSlackNotification(eq(TestFixtures.SLACK_LOCAL_HOOK_URL), eq(TestFixtures.PR_OVERRIDE_SETTINGS_PAYLOAD));
   }
@@ -182,8 +186,8 @@ public class PullRequestActivityListenerTest {
     when(slackSettings.getSlackChannelName()).thenReturn("master/.*->#master_channel,bugfix/.*->#bugfix_channel");
     when(pullRequestRefTo.getDisplayId()).thenReturn(TestFixtures.BUGFIX_REF_ID);
 
-    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
-    listener.NotifySlackChannel(event);
+    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, slackUserSettingService, navBuilder, slackNotifier, avatarService);
+    listener.notifySlackChannel(event);
 
     verify(slackNotifier).SendSlackNotification(eq(TestFixtures.SLACK_LOCAL_HOOK_URL), eq(TestFixtures.PR_BUGFIX_CHANNEL_PAYLOAD));
   }
@@ -194,8 +198,8 @@ public class PullRequestActivityListenerTest {
     when(slackSettings.isSlackNotificationsOverrideEnabled()).thenReturn(true);
     when(slackSettings.isSlackNotificationsOpenedEnabled()).thenReturn(true);
 
-    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, navBuilder, slackNotifier, avatarService);
-    listener.NotifySlackChannel(event);
+    PullRequestActivityListener listener = new PullRequestActivityListener(slackGlobalSettingsService, slackSettingsService, slackUserSettingService, navBuilder, slackNotifier, avatarService);
+    listener.notifySlackChannel(event);
 
     verify(slackNotifier).SendSlackNotification(eq(TestFixtures.SLACK_LOCAL_HOOK_URL), eq(TestFixtures.PR_NO_CHANNEL_PAYLOAD));
   }
