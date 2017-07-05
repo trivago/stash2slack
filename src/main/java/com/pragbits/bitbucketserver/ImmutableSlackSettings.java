@@ -160,6 +160,7 @@ public class ImmutableSlackSettings implements SlackSettings {
                 ", slackNotificationsCommentedEnabled=" + slackNotificationsCommentedEnabled +
                 ", slackNotificationsEnabledForPush=" + slackNotificationsEnabledForPush +
                 ", slackNotificationsEnabledForPersonal=" + slackNotificationsEnabledForPersonal +
+                ", slackNotificationsNeedsWorkEnabled=" + slackNotificationsNeedsWorkEnabled + 
                 ", notificationLevel=" + notificationLevel +
                 ", notificationPrLevel=" + notificationPrLevel +
                 ", slackChannelName=" + slackChannelName +
