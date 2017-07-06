@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pragbits.bitbucketserver</groupId>
     <artifactId>stash2slack</artifactId>
-    <version>2.0.9.trivago</version>
+    <version>2.1.0.trivago</version>
     <organization>
         <name>Pragmatic Bits</name>
         <url>http://blog.pragbits.com/</url>
@@ -15,10 +15,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bitbucket.version>4.1.0</bitbucket.version>
+        <bitbucket.version>5.0.0</bitbucket.version>
         <bitbucket.data.version>${bitbucket.version}</bitbucket.data.version>
         <atlassian-sal-api.version>3.0.5</atlassian-sal-api.version>
-        <amps.version>6.1.0</amps.version>
+        <amps.version>6.2.11</amps.version>
     </properties>
 
     <dependencyManagement>
@@ -33,23 +33,22 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-
-  	<dependency>
+        <dependency>
             <groupId>com.atlassian.bitbucket.server</groupId>
             <artifactId>bitbucket-api</artifactId>
             <scope>provided</scope>
         </dependency>
- 	<dependency>
+        <dependency>
             <groupId>com.atlassian.bitbucket.server</groupId>
             <artifactId>bitbucket-spi</artifactId>
             <scope>provided</scope>
         </dependency>
-    	<dependency>
+        <dependency>
             <groupId>com.atlassian.bitbucket.server</groupId>
             <artifactId>bitbucket-git-api</artifactId>
             <scope>provided</scope>
         </dependency>
- 	<dependency>
+        <dependency>
             <groupId>com.atlassian.sal</groupId>
             <artifactId>sal-api</artifactId>
             <version>${atlassian-sal-api.version}</version>
@@ -116,11 +115,10 @@
             <version>1.4.0</version>
         </dependency>
         <dependency>
-         <groupId>xalan</groupId>
-         <artifactId>xalan</artifactId>
-         <version>2.7.1</version>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.1</version>
         </dependency>
-        
     </dependencies>
 
     <build>
@@ -131,14 +129,118 @@
                 <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
+                    <allowGoogleTracking>false</allowGoogleTracking>
+                    <enableQuickReload>true</enableQuickReload>
+                    <enableFastdev>false</enableFastdev>
+                    <enableDevToolbox>false</enableDevToolbox>
+                    <enablePde>false</enablePde>
+                    <skipRestDocGeneration>true</skipRestDocGeneration>
+                    <allowGoogleTracking>false</allowGoogleTracking>
+                    <skipManifestValidation>true</skipManifestValidation>
+                    <extractDependencies>false</extractDependencies>
+                    <server>localhost</server>
+                    <!--
+                         #Bitbucket Plugin development
+                         In order to test the cluster option the following environment variables need to be configured
+                         export BITBUCKET_JDBC_URL="jdbc:mysql://datatbase_instance_url/database?characterEncoding=utf8&amp;useUnicode=true&amp;sessionVariables=storage_engine%3DInnoDB"
+                         export BITBUCKET_JDBC_USER=XXXXXXXXXXXXXX
+                         export BITBUCKET_JDBC_PASSWORD=XXXXXXXXXXXXXX
+                    -->
+                    <!-- run DC cluster using 'atlas-run \-\-testGroup clusterTestGroup' -->
+                    <!-- you will also need to download mysql driver and place in /home/lib for *all* nodes in cluster. See bitbucket.shared.home values for each node below -->
+                    <!-- see https://developer.atlassian.com/stash/docs/latest/how-tos/cluster-safe-plugins.html -->
+                    <!-- the file runClustered.sh aggregates some manipulations needed to make it easier, but starting a clister is sloooow -->
                     <products>
+                        <!-- standalone non-clustered w/ in-memory db -->
                         <product>
                             <id>bitbucket</id>
-                            <instanceId>bitbucket</instanceId>
+                            <instanceId>bitbucket-single</instanceId>
                             <version>${bitbucket.version}</version>
                             <dataVersion>${bitbucket.data.version}</dataVersion>
                         </product>
+                        <!-- node 1 for datacenter configuration -->
+                        <product>
+                            <id>bitbucket</id>
+                            <instanceId>bitbucket-node-1</instanceId>
+                            <version>${bitbucket.version}</version>
+                            <dataVersion>${bitbucket.data.version}</dataVersion>
+                            <systemPropertyVariables>
+                                <bitbucket.shared.home>${project.basedir}/target/bitbucket-node-1/home/shared</bitbucket.shared.home>
+                                <!-- override the SSH port used for this node -->
+                                <bitbucket.plugin.ssh.port>7997</bitbucket.plugin.ssh.port>
+                                <!-- override database settings so both nodes use a single database -->
+                                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+                                <!-- We don't care this is visible. Protected network with empty dataset -->
+                                <!-- You can modify to point to any MySQL db with permissions to create/alter/drop -->
+                                <jdbc.url>${env.BITBUCKET_JDBC_URL}</jdbc.url>
+                                <jdbc.user>${env.BITBUCKET_JDBC_USER}</jdbc.user>
+                                <jdbc.password>${env.BITBUCKET_JDBC_PASSWORD}</jdbc.password>
+                                <!-- allow cluster nodes to find each other over TCP/IP thus enabling clustering for this node -->
+                                <hazelcast.network.tcpip>true</hazelcast.network.tcpip>
+                                <!-- set to true if your load balancer supports stick sessions -->
+                                <hazelcast.http.stickysessions>false</hazelcast.http.stickysessions>
+                                <!-- forces Stash to fully finish starting up before yielding to the func test runner or atlas-run -->
+                                <johnson.spring.lifecycle.synchronousStartup>true</johnson.spring.lifecycle.synchronousStartup>
+                            </systemPropertyVariables>
+                            <libArtifacts>
+                                <!-- ensure MySQL drivers are available to Bitbucket -->
+                                <libArtifact>
+                                    <groupId>mysql</groupId>
+                                    <artifactId>mysql-connector-java</artifactId>
+                                    <version>5.1.41</version>
+                                </libArtifact>
+                            </libArtifacts>
+                        </product>
+                        <!-- node 2 for datacenter configuration-->
+                        <product>
+                            <id>bitbucket</id>
+                            <instanceId>bitbucket-node-2</instanceId>
+                            <version>${bitbucket.version}</version>
+                            <dataVersion>${bitbucket.data.version}</dataVersion>
+                            <!-- override the HTTP port used for this node -->
+                            <httpPort>7992</httpPort>
+                            <systemPropertyVariables>
+                                <bitbucket.shared.home>${project.basedir}/target/bitbucket-node-1/home/shared</bitbucket.shared.home>
+                                <!-- override the SSH port used for this node -->
+                                <bitbucket.plugin.ssh.port>7998</bitbucket.plugin.ssh.port>
+                                <!-- override database settings so both nodes use a single database -->
+                                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+                                <jdbc.url>${env.BITBUCKET_JDBC_URL}</jdbc.url>
+                                <jdbc.user>${env.BITBUCKET_JDBC_USER}</jdbc.user>
+                                <jdbc.password>${env.BITBUCKET_JDBC_PASSWORD}</jdbc.password>
+                                <!-- allow cluster nodes to find each other over TCP/IP thus enabling clustering for this node -->
+                                <hazelcast.network.tcpip>true</hazelcast.network.tcpip>
+                                <!-- set to true if your load balancer supports stick sessions -->
+                                <hazelcast.http.stickysessions>false</hazelcast.http.stickysessions>
+                                <!-- forces Stash to fully finish starting up before yielding to the func test runner or atlas-run -->
+                                <johnson.spring.lifecycle.synchronousStartup>true</johnson.spring.lifecycle.synchronousStartup>
+                            </systemPropertyVariables>
+                            <libArtifacts>
+                                <!-- ensure MySQL drivers are available to Bitbucket -->
+                                <libArtifact>
+                                    <groupId>mysql</groupId>
+                                    <artifactId>mysql-connector-java</artifactId>
+                                    <version>5.1.41</version>
+                                </libArtifact>
+                            </libArtifacts>
+                        </product>
                     </products>
+                    <testGroups>
+                        <!-- tell AMPS / Maven which products ie nodes to run for the named testGroup 'clusterTestGroup' -->
+                        <testGroup>
+                            <id>clusterTestGroup</id>
+                            <productIds>
+                                <productId>bitbucket-node-1</productId>
+                                <productId>bitbucket-node-2</productId>
+                            </productIds>
+                        </testGroup>
+                        <testGroup>
+                            <id>default</id>
+                            <productIds>
+                                <productId>bitbucket-single</productId>
+                            </productIds>
+                        </testGroup>
+                    </testGroups>
                 </configuration>
             </plugin>
             <plugin>
@@ -152,8 +254,7 @@
         </plugins>
     </build>
 
-
-  <repositories>
+    <repositories>
         <repository>
             <id>atlassian-public</id>
             <url>https://maven.atlassian.com/content/groups/public</url>
@@ -174,6 +275,5 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
-
 
 </project>

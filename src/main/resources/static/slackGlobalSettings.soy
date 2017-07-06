@@ -15,6 +15,7 @@
  * @param slackNotificationsDeclinedEnabled
  * @param slackNotificationsMergedEnabled
  * @param slackNotificationsCommentedEnabled
+ * @param slackNotificationsNeedsWorkEnabled
  * @param slackNotificationsEnabledForPush
  * @param slackNotificationsEnabledForPersonal
  * @param notificationLevel
@@ -104,6 +105,12 @@
                         {param labelContent: getText('stash2slack.global.settings.slack.commented.enabled.label') /}
                         {param checked: $slackNotificationsCommentedEnabled /}
                         {param description: getText('stash2slack.global.settings.slack.commented.enabled.description') /}
+                    {/call}
+                    {call widget.aui.form.checkbox}
+                        {param id: 'slackNotificationsNeedsWorkEnabled' /}
+                        {param labelContent: getText('stash2slack.global.settings.slack.needs.work.enabled.label') /}
+                        {param checked: $slackNotificationsNeedsWorkEnabled /}
+                        {param description: getText('stash2slack.global.settings.slack.needs.work.enabled.description') /}
                     {/call}
                 </div>
 

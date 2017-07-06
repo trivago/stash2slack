@@ -50,6 +50,9 @@ public interface SlackGlobalSettingsService {
     boolean getSlackNotificationsEnabledForPersonal();
     void setSlackNotificationsEnabledForPersonal(boolean value);
 
+    boolean getSlackNotificationsNeedsWorkEnabled();
+    void setSlackNotificationsNeedsWorkEnabled(boolean value);
+
     String getUsername();
     void setUsername(String value);
 

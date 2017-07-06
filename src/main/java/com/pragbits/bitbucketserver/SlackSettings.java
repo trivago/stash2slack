@@ -14,6 +14,7 @@ public interface SlackSettings {
     boolean isSlackNotificationsCommentedEnabled();
     boolean isSlackNotificationsEnabledForPush();
     boolean isSlackNotificationsEnabledForPersonal();
+    boolean isSlackNotificationsNeedsWorkEnabled();
     NotificationLevel getNotificationLevel();
     NotificationLevel getNotificationPrLevel();
     String getSlackChannelName();
