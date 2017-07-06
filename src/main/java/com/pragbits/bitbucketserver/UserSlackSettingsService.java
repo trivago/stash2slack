@@ -34,7 +34,7 @@ public class UserSlackSettingsService implements SlackUserSettingsService {
             true,   // commented
             false,  // push enabled
             false,  // personal (forks) enabled
-            true,   // Needs work feature enabled
+            false,   // Needs work feature enabled
             NotificationLevel.VERBOSE,
             NotificationLevel.VERBOSE,
             "",         // channel name override
