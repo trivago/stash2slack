@@ -322,11 +322,11 @@ public class PullRequestActivityListener {
             
             case REVIEWED:
                 attachment.setColor(ColorCode.ORANGE.getCode());
-                attachment.setFallback(String.format("%s reviewed pull request \"%s\". <%s|(open)>",
+                attachment.setFallback(String.format("%s Needs Work \"%s\". <%s|(open)>",
                     userName,
                     event.getPullRequest().getTitle(),
                     url));
-                attachment.setText(String.format("reviewed pull request <%s|#%d: %s>",
+                attachment.setText(String.format("Needs Work <%s|#%d: %s>",
                     url,
                     event.getPullRequest().getId(),
                     event.getPullRequest().getTitle()));
