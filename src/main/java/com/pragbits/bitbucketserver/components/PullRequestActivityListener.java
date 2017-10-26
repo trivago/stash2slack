@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PullRequestActivityListener {
     private static final Logger log = LoggerFactory.getLogger(PullRequestActivityListener.class);
@@ -55,10 +56,10 @@ public class PullRequestActivityListener {
 
 	public void notifySlackUsers(PullRequestActivityEvent event) {
 		Repository repository = event.getPullRequest().getToRef().getRepository();
-		
+
+		Set<ApplicationUser> users = event.getPullRequest().getWatchers().stream().map(w -> w.getUser()).collect(Collectors.toSet());
 		// find out if notification is enabled for this user
-		for (Watcher watcher : event.getPullRequest().getWatchers()) {
-			ApplicationUser user = watcher.getUser();
+		for (ApplicationUser user : users) {
 			
 			SlackSettings slackSettings = slackUserSettingsService.getSlackSettings(user);
 
