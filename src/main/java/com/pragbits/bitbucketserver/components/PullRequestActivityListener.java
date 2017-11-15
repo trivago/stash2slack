@@ -57,7 +57,10 @@ public class PullRequestActivityListener {
 	public void notifySlackUsers(PullRequestActivityEvent event) {
 		Repository repository = event.getPullRequest().getToRef().getRepository();
 
-		Set<ApplicationUser> users = event.getPullRequest().getWatchers().stream().map(w -> w.getUser()).collect(Collectors.toSet());
+		Set<ApplicationUser> users = event.getPullRequest().getWatchers().stream()
+		                                  .map(w -> w.getUser())
+		                                  .collect(Collectors.toSet());
+
 		// find out if notification is enabled for this user
 		for (ApplicationUser user : users) {
 			
